@@ -1,0 +1,44 @@
+<div class="calendar-container">
+  
+  <div class="calendar-header">
+    <div class="class-selector">
+      <mat-form-field appearance="outline" class="class-dropdown">
+        <mat-select [(ngModel)]="selectedClassId" (selectionChange)="onClassChange()">
+          <mat-option value="All classes">All classes</mat-option>
+          <mat-option *ngFor="let cls of classes" [value]="cls.id">{{ cls.className }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="week-navigation">
+      <button mat-icon-button class="nav-btn" (click)="previousWeek()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span class="week-range">{{ getWeekRangeText() }}</span>
+      <button mat-icon-button class="nav-btn" (click)="nextWeek()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="calendar-grid">
+    <div class="day-column" *ngFor="let day of daysOfWeek">
+      <div class="day-header" [class.today]="day.isToday">
+        <div class="day-name">{{ day.name }}</div>
+        <div class="day-number">
+          <div class="day-circle">{{ day.number }}</div>
+        </div>
+      </div>
+      <div class="day-content">
+        <div class="assignment-chip" 
+             *ngFor="let assignment of getAssignmentsForDay(day.date)"
+             [style.background-color]="getBackground(assignment.classroomId)"
+             [routerLink]="['/classroom', assignment.classroomId, 'assignment', assignment.id]">
+          <span class="assignment-time" *ngIf="assignment.dueDate">{{ assignment.dueDate | date:'shortTime' }}</span>
+          <span class="assignment-title">{{ assignment.title }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

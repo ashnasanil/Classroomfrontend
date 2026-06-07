@@ -1,0 +1,49 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Join class</h2>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <div class="card user-card" *ngIf="currentUser">
+      <div class="card-title">You're currently signed in as</div>
+      <div class="user-info-row">
+        <div class="user-avatar" [ngStyle]="{'background-color': currentUser.color || '#78909c'}">
+          {{ currentUser.name.charAt(0).toUpperCase() }}
+        </div>
+        <div class="user-details">
+          <div class="user-name">{{ currentUser.name }}</div>
+          <div class="user-email">{{ currentUser.email }}</div>
+        </div>
+      </div>
+      <button mat-stroked-button class="switch-account-btn">Switch account</button>
+    </div>
+
+    <div class="card code-card">
+      <div class="card-title">Class code</div>
+      <p class="join-instructions">Ask your teacher for the class code, then enter it here.</p>
+      <form [formGroup]="joinForm" class="dialog-form">
+        <mat-form-field appearance="outline" class="class-code-field">
+          <mat-label>Class code</mat-label>
+          <input matInput formControlName="classCode" required>
+          <mat-error *ngIf="joinForm.get('classCode')?.hasError('required')">Class code is required</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="help-section">
+      <h3>To sign in with a class code</h3>
+      <ul>
+        <li>Use an authorized account</li>
+        <li>Use a class code with 5-8 letters or numbers, and no spaces or symbols</li>
+      </ul>
+      <p>If you have trouble joining the class, go to the <a href="#">Help Center article</a></p>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button (click)="onCancel()" class="cancel-btn">Cancel</button>
+    <button mat-button [disabled]="joinForm.invalid || isLoading" (click)="onJoin()" class="join-action-btn">Join</button>
+  </mat-dialog-actions>
+</div>

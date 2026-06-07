@@ -1,0 +1,21 @@
+<h2 mat-dialog-title class="dialog-title">Delete {{ data.classroom.className }}?</h2>
+
+<mat-dialog-content>
+  <div class="warnings-container">
+    <div class="warning-item">
+      <span>You will no longer have access to any posts or comments that have been added to this class.</span>
+    </div>
+    <div class="warning-item">
+      <span>Class files will remain in Google Drive.</span>
+    </div>
+  </div>
+  
+  <div class="warning-text">
+    <strong>Warning:</strong> You can't undo this action.
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button (click)="onCancel()" class="cancel-btn">Cancel</button>
+  <button mat-button (click)="onDelete()" class="delete-btn">Delete</button>
+</mat-dialog-actions>

@@ -1,0 +1,139 @@
+<div class="settings-container" *ngIf="settings">
+  <div class="settings-content">
+    
+    <!-- Profile Card -->
+    <div class="settings-card">
+      <h2 class="card-title">Profile</h2>
+      
+      <div class="setting-item-group">
+        <div class="setting-label">Profile picture</div>
+        <div class="profile-picture-row">
+          <div class="avatar-circle">{{ username ? username.charAt(0).toUpperCase() : 'U' }}</div>
+          <a href="#" class="blue-link" (click)="openProfilePictureDialog($event)">Change</a>
+        </div>
+      </div>
+      
+      <div class="setting-item-group">
+        <div class="setting-label">Account settings</div>
+        <div class="setting-description">
+          Change your password and security options, and access other Google services. <a href="https://myaccount.google.com/" target="_blank" class="blue-link">Manage</a>
+        </div>
+      </div>
+
+      <div class="setting-item-group">
+        <div class="setting-label">Change name</div>
+        <div class="setting-description">
+          To change your name, go to your <a href="https://myaccount.google.com/name" target="_blank" class="blue-link">account settings</a>.
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications Card -->
+    <div class="settings-card">
+      <h2 class="card-title">Notifications</h2>
+      
+      <div class="setting-section">
+        <h3 class="section-title">Email</h3>
+        <div class="setting-description mb-3">
+          These settings apply to the notifications you get by email. <a href="#" class="blue-link">Learn more</a>
+        </div>
+        
+        <div class="setting-row">
+          <div class="setting-label">Allow email notifications</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.allowEmailNotifications" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="setting-section">
+        <h3 class="section-title">Comments</h3>
+        
+        <div class="setting-row">
+          <div class="setting-label">Comments on your posts</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.commentsOnYourPosts" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+        
+        <div class="setting-row">
+          <div class="setting-label">Comments that mention you</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.commentsThatMentionYou" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">Private comments on work</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.privateCommentsOnWork" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="setting-section">
+        <h3 class="section-title">Classes you're enrolled in</h3>
+        
+        <div class="setting-row">
+          <div class="setting-label">Work and other posts from teachers</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.workAndPostsFromTeachers" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+        
+        <div class="setting-row">
+          <div class="setting-label">Returned work and grades from your teachers</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.returnedWorkAndGrades" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">Invitations to join classes as a student</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.invitationsToJoinClasses" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">Due-date reminders for your work</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.dueDateReminders" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="setting-section">
+        <h3 class="section-title">Classes you teach</h3>
+        
+        <div class="setting-row">
+          <div class="setting-label">Late submissions of student work</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.lateSubmissions" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+        
+        <div class="setting-row">
+          <div class="setting-label">Resubmissions of student work</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.resubmissions" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">Invitations to co-teach classes</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.invitationsToCoteach" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">Scheduled post published or failed</div>
+          <mat-slide-toggle color="primary" [(ngModel)]="settings.scheduledPostPublished" (change)="onToggleChange()"></mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="setting-section border-bottom-0">
+        <div class="setting-row">
+          <div class="setting-label">
+            Class notifications
+            <div class="setting-description mt-1">These settings apply to both your email and device notifications for each class</div>
+          </div>
+          <mat-icon style="color: #5f6368;">expand_more</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- Homepage Card -->
+    <div class="settings-card">
+      <h2 class="card-title">Homepage</h2>
+      
+      <div class="setting-row pb-0">
+        <div class="setting-label">
+          Display name
+          <div class="setting-description mt-1">Show your name on the homepage</div>
+        </div>
+        <mat-slide-toggle color="primary" [(ngModel)]="settings.showDisplayNameOnHomepage" (change)="onToggleChange()"></mat-slide-toggle>
+      </div>
+    </div>
+
+  </div>
+</div>

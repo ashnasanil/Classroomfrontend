@@ -1,0 +1,107 @@
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background-color: #f0f4f9;
+  border-radius: 24px;
+  min-width: 500px;
+  box-sizing: border-box;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.dialog-title {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 22px;
+  color: #3c4043;
+}
+
+.close-btn {
+  color: #5f6368;
+}
+
+.dialog-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0 60px 0;
+}
+
+.code-display {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 110px;
+  font-weight: 400;
+  color: #3c4043;
+  letter-spacing: -2px;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.class-info {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.class-name {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3c4043;
+}
+
+.class-section {
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 14px;
+  color: #5f6368;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.copy-link-btn {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a73e8;
+}
+
+.copy-link-btn mat-icon {
+  margin-right: 8px;
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.fullscreen-exit-btn {
+  color: #5f6368;
+}
+
+/* Override default mat-dialog-container padding if necessary */
+::ng-deep .mat-mdc-dialog-surface {
+  border-radius: 24px !important;
+  background-color: transparent !important;
+}
+
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 24px !important;
+  background-color: transparent !important;
+}
+
+::ng-deep .cdk-overlay-pane {
+  background-color: #f0f4f9;
+  border-radius: 24px;
+}

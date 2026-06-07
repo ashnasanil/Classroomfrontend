@@ -1,0 +1,18 @@
+.dialog-content {
+  padding-top: 16px;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.error-msg {
+  color: #d93025;
+  font-size: 14px;
+  margin-top: 8px;
+}

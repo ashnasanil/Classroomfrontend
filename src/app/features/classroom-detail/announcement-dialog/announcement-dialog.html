@@ -1,0 +1,74 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <span class="header-label">For</span>
+    <div class="header-selectors">
+      <button mat-button class="selector-btn">
+        <span class="selector-text">{{ className }}</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+      <button mat-stroked-button class="selector-btn students-btn">
+        <mat-icon>people_outline</mat-icon>
+        <span>All students</span>
+      </button>
+    </div>
+  </div>
+  
+  <div class="dialog-content">
+    <div class="textarea-container">
+      <textarea 
+        class="announce-textarea" 
+        [(ngModel)]="content"
+        placeholder="Announce something to your class"
+        rows="5"
+        cdkFocusInitial>
+      </textarea>
+      
+      <div class="formatting-toolbar">
+        <button mat-icon-button matTooltip="Bold"><mat-icon>format_bold</mat-icon></button>
+        <button mat-icon-button matTooltip="Italic"><mat-icon>format_italic</mat-icon></button>
+        <button mat-icon-button matTooltip="Underline"><mat-icon>format_underlined</mat-icon></button>
+        <button mat-icon-button matTooltip="Bulleted list"><mat-icon>format_list_bulleted</mat-icon></button>
+        <button mat-icon-button matTooltip="Remove formatting"><mat-icon>format_clear</mat-icon></button>
+      </div>
+    </div>
+
+    <!-- Attachments Preview -->
+    <div class="attachments-preview" *ngIf="attachments.length > 0">
+      <div class="attachment-chip" *ngFor="let att of attachments; let i = index">
+        <mat-icon *ngIf="att.type === 'drive'" class="att-icon drive">add_to_drive</mat-icon>
+        <mat-icon *ngIf="att.type === 'youtube'" class="att-icon youtube">ondemand_video</mat-icon>
+        <mat-icon *ngIf="att.type === 'upload'" class="att-icon upload">insert_drive_file</mat-icon>
+        <mat-icon *ngIf="att.type === 'link'" class="att-icon link">link</mat-icon>
+        
+        <span class="att-title">{{ att.title || att.url }}</span>
+        <button mat-icon-button class="att-remove" (click)="removeAttachment(i)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog-footer">
+    <div class="attachment-actions">
+      <button mat-icon-button class="attach-btn" matTooltip="Add Google Drive file" (click)="addDrive()">
+        <mat-icon>add_to_drive</mat-icon>
+      </button>
+      <button mat-icon-button class="attach-btn" matTooltip="Add YouTube video" (click)="addYouTube()">
+        <mat-icon>ondemand_video</mat-icon>
+      </button>
+      <button mat-icon-button class="attach-btn" matTooltip="Upload file" (click)="fileInput.click()">
+        <mat-icon>file_upload</mat-icon>
+      </button>
+      <input type="file" #fileInput style="display: none" (change)="triggerFileUpload($event)">
+      
+      <button mat-icon-button class="attach-btn" matTooltip="Add link" (click)="addLink()">
+        <mat-icon>link</mat-icon>
+      </button>
+    </div>
+    
+    <div class="post-actions">
+      <button mat-button class="cancel-btn" (click)="onCancel()">Cancel</button>
+      <button mat-flat-button color="primary" class="post-btn" [disabled]="!content.trim()" (click)="onPost()">Post</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<h2 mat-dialog-title class="dialog-title">Using Classroom at a school with students?</h2>
+<mat-dialog-content class="dialog-content">
+  <p class="dialog-text">
+    If so, your school must sign up for a <a href="#" class="dialog-link">Google Workspace for Education</a> account before you can use Classroom. <a href="#" class="dialog-link">Learn More</a>
+  </p>
+  <p class="dialog-text">
+    Google Workspace for Education lets schools decide which Google services their students can use, and provides additional <a href="#" class="dialog-link">privacy and security</a> protections that are important in a school setting. Students cannot use Google Classroom at a school with personal accounts.
+  </p>
+
+  <div class="checkbox-container">
+    <mat-checkbox [(ngModel)]="agreed" class="agreement-checkbox">
+      <span class="checkbox-text">
+        I've read and understand the above notice, and I'm not using Classroom at a school with students
+      </span>
+    </mat-checkbox>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+  <button mat-button class="action-btn go-back-btn" (click)="onCancel()">Go back</button>
+  <button mat-button class="action-btn continue-btn" [disabled]="!agreed" (click)="onContinue()">Continue</button>
+</mat-dialog-actions>

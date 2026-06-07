@@ -1,0 +1,81 @@
+.dialog-title {
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: #202124;
+  margin-bottom: 24px;
+}
+
+.warnings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.warning-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  color: #3c4043;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.warning-item mat-icon {
+  color: #5f6368;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.classes-list-header {
+  font-weight: 500;
+  color: #202124;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.class-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #1967d2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.class-name {
+  color: #202124;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.class-section {
+  color: #5f6368;
+  font-size: 12px;
+}
+
+.dialog-actions {
+  padding: 8px 16px 16px;
+}
+
+.cancel-btn {
+  color: #1967d2;
+  font-weight: 500;
+}
+
+.archive-btn {
+  color: #1967d2;
+  font-weight: 500;
+}

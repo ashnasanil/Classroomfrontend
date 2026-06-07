@@ -1,0 +1,559 @@
+
+<div class="assignment-detail-container">
+  <ng-container *ngIf="assignment; else loadingOrError">
+    
+    <!-- TEACHER VIEW: Tabs -->
+    <ng-container *ngIf="role === 'Teacher'">
+      <mat-tab-group class="custom-tabs" animationDuration="0ms" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="selectedTabIndex = $event">
+        <mat-tab label="Instructions">
+          <div class="instructions-content">
+            <div class="assignment-header">
+              <div class="header-icon-col">
+                <div class="assignment-icon-circle">
+                  <mat-icon>assignment</mat-icon>
+                </div>
+              </div>
+              <div class="header-text-col">
+                <div class="title-row">
+                  <h1 class="assignment-title">{{ assignment.title }}</h1>
+                  <button mat-icon-button class="more-btn" [matMenuTriggerFor]="assignmentMenu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #assignmentMenu="matMenu">
+                    <button mat-menu-item (click)="editAssignment()">Edit</button>
+                    <button mat-menu-item (click)="deleteAssignment()">Delete</button>
+                    <button mat-menu-item (click)="copyLink()">Copy link</button>
+                  </mat-menu>
+                </div>
+                <div class="author-row">
+                  <span class="author-name">{{ assignment.teacherName || 'Teacher' }}</span>
+                  <span class="dot-separator">&middot;</span>
+                  <span class="post-time">{{ assignment.createdAt | date:'shortTime' }}</span>
+                </div>
+                <div class="points-row">
+                  <span class="points-text">{{ assignment.points ? assignment.points + ' points' : 'Ungraded' }}</span>
+                  <span class="due-text" *ngIf="assignment.dueDate">Due {{ assignment.dueDate | date:'mediumDate' }}</span>
+                </div>
+                <mat-divider class="header-divider"></mat-divider>
+              </div>
+            </div>
+
+            <div class="assignment-body">
+              <div class="assignment-description" *ngIf="assignment.description" [innerHTML]="assignment.description">
+              </div>
+            </div>
+
+            <div class="class-comments-section">
+              <div class="comments-header">
+                <mat-icon>group</mat-icon>
+                <span>Class comments</span>
+              </div>
+
+              <!-- Comments Input -->
+              <div class="comment-input-area">
+                <div class="comment-avatar">
+                  {{ currentUserInitial }}
+                </div>
+                <div class="comment-input-box">
+                  <textarea 
+                    placeholder="Add class comment..." 
+                    [(ngModel)]="newComment"
+                    rows="1"></textarea>
+                  <div class="comment-toolbar" *ngIf="newComment">
+                    <button mat-icon-button><mat-icon>format_bold</mat-icon></button>
+                    <button mat-icon-button><mat-icon>format_italic</mat-icon></button>
+                    <button mat-icon-button><mat-icon>format_underlined</mat-icon></button>
+                    <button mat-icon-button><mat-icon>format_list_bulleted</mat-icon></button>
+                    <button mat-icon-button><mat-icon>format_clear</mat-icon></button>
+                  </div>
+                </div>
+                <button mat-icon-button class="send-btn" [class.active]="newComment" (click)="sendComment()">
+                  <mat-icon>send</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        
+        <mat-tab label="Student work">
+        <div class="sw-page-container">
+          
+          <!-- Left Column (300px) -->
+          <div class="sw-left-col">
+            <div class="sw-left-toolbar">
+              <div class="return-split-btn" [class.disabled]="selectedStudents.size === 0">
+                <button class="rsb-main" [disabled]="selectedStudents.size === 0" (click)="openReturnDialog()">Return</button>
+                <div class="rsb-divider"></div>
+                <button class="rsb-arrow" [disabled]="selectedStudents.size === 0"><mat-icon>arrow_drop_down</mat-icon></button>
+              </div>
+              <button mat-icon-button class="email-btn" [disabled]="selectedStudents.size === 0"><mat-icon>mail</mat-icon></button>
+            </div>
+            
+            <!-- Left Content -->
+            <div class="sw-left-content">
+              <div class="sw-all-students">
+                <mat-checkbox color="primary" [checked]="selectedStudents.size === studentsList.length && studentsList.length > 0" (change)="toggleAllStudents($event)"></mat-checkbox>
+                <mat-icon>group</mat-icon>
+                <span>All students</span>
+              </div>
+              
+              <div class="sw-sort-dropdown-container">
+                <div class="sw-sort-dropdown" [matMenuTriggerFor]="sortMenu">
+                  <span>{{ currentSort }}</span>
+                  <mat-icon class="sort-drop-icon">arrow_drop_down</mat-icon>
+                </div>
+              </div>
+              <mat-menu #sortMenu="matMenu" class="custom-sort-menu">
+                <button mat-menu-item (click)="currentSort = 'Sort by last name'">Sort by last name</button>
+                <button mat-menu-item (click)="currentSort = 'Sort by first name'">Sort by first name</button>
+                <button mat-menu-item (click)="currentSort = 'Sort by status'" class="active-menu-item">Sort by status</button>
+                <button mat-menu-item (click)="currentSort = 'Sort by group'">Sort by group</button>
+              </mat-menu>
+              <div class="sw-student-list" *ngIf="studentsList.length > 0">
+                <!-- Graded Group -->
+                <ng-container *ngIf="gradedStudents.length > 0">
+                  <div class="sw-group-header">
+                    <mat-checkbox color="primary" [checked]="false" disabled></mat-checkbox>
+                    <span>Graded</span>
+                  </div>
+                  <div class="sw-student-item" *ngFor="let student of gradedStudents" (click)="selectStudent(student)" [class.selected]="selectedStudentForPreview?.userId === student.userId">
+                    <mat-checkbox color="primary" [checked]="selectedStudents.has(student.userId)" (change)="toggleStudentSelection(student, $event)" (click)="$event.stopPropagation()"></mat-checkbox>
+                    <div class="sw-student-avatar">{{ student.firstName.charAt(0) }}</div>
+                    <div class="sw-student-name-container">
+                      <span class="sw-student-name">{{ student.firstName }} {{ student.lastName }}</span>
+                      <span class="sw-student-attachment" *ngIf="student.attachmentUrl">1 attachment</span>
+                    </div>
+                    <div class="sw-student-status graded-status">
+                      <span class="graded-score">{{ draftGrades[student.userId] }}</span>
+                      <span class="max-grade">/100</span>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <!-- Turned In Group -->
+                <ng-container *ngIf="turnedInStudents.length > 0">
+                  <div class="sw-group-header">
+                    <mat-checkbox color="primary" [checked]="false" disabled></mat-checkbox>
+                    <span>Turned in</span>
+                  </div>
+                  <div class="sw-student-item" *ngFor="let student of turnedInStudents" (click)="selectStudent(student)" [class.selected]="selectedStudentForPreview?.userId === student.userId">
+                    <mat-checkbox color="primary" [checked]="selectedStudents.has(student.userId)" (change)="toggleStudentSelection(student, $event)" (click)="$event.stopPropagation()"></mat-checkbox>
+                    <div class="sw-student-avatar">{{ student.firstName.charAt(0) }}</div>
+                    <div class="sw-student-name-container">
+                      <span class="sw-student-name">{{ student.firstName }} {{ student.lastName }}</span>
+                      <span class="sw-student-attachment" *ngIf="student.attachmentUrl">1 attachment</span>
+                    </div>
+                    <div class="sw-student-status grade-input-container">
+                      <input type="text" class="grade-input" [value]="draftGrades[student.userId] || ''" (input)="onGradeChange(student.userId, $event)" (click)="$event.stopPropagation()">
+                      <span class="max-grade">/100</span>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <!-- Assigned Group -->
+                <ng-container *ngIf="assignedStudents.length > 0">
+                  <div class="sw-group-header">
+                    <mat-checkbox color="primary" [checked]="false" disabled></mat-checkbox>
+                    <span>Assigned</span>
+                  </div>
+                  <div class="sw-student-item" *ngFor="let student of assignedStudents" (click)="selectStudent(student)" [class.selected]="selectedStudentForPreview?.userId === student.userId">
+                    <mat-checkbox color="primary" [checked]="selectedStudents.has(student.userId)" (change)="toggleStudentSelection(student, $event)" (click)="$event.stopPropagation()"></mat-checkbox>
+                    <div class="sw-student-avatar">{{ student.firstName.charAt(0) }}</div>
+                    <div class="sw-student-name-container">
+                      <span class="sw-student-name">{{ student.firstName }} {{ student.lastName }}</span>
+                      <span class="sw-student-attachment" *ngIf="student.attachmentUrl">1 attachment</span>
+                    </div>
+                    <div class="sw-student-status grade-input-container">
+                      <input type="text" class="grade-input" [value]="draftGrades[student.userId] || ''" (input)="onGradeChange(student.userId, $event)" (click)="$event.stopPropagation()">
+                      <span class="max-grade">/100</span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="sw-right-col">
+            <!-- Right Toolbar -->
+            <div class="sw-right-toolbar">
+              <div class="gc-points-wrapper">
+                <div class="gc-points-input-container" [matMenuTriggerFor]="pointsMenu" #menuTrigger="matMenuTrigger">
+                  <input type="text" class="gc-points-input" [value]="assignment.points !== null ? assignment.points : 'Ungraded'" (input)="onPointsChange($event)" (click)="$event.stopPropagation()">
+                  <mat-icon class="gc-points-arrow" (click)="menuTrigger.openMenu(); $event.stopPropagation()">arrow_drop_down</mat-icon>
+                </div>
+                <mat-menu #pointsMenu="matMenu" class="custom-points-menu">
+                  <button mat-menu-item (click)="setUngraded()" class="ungraded-btn">Ungraded</button>
+                </mat-menu>
+              </div>
+              <button mat-icon-button class="settings-btn"><mat-icon>settings</mat-icon></button>
+            </div>
+            
+            <!-- Right Content -->
+            <div class="sw-right-content">
+              <h2 class="sw-assignment-title">{{ assignment.title }}</h2>
+              
+              <div class="sw-stats-row">
+                <div class="sw-stat-box">
+                  <div class="sw-stat-number">{{ turnedInCount }}</div>
+                  <div class="sw-stat-label">Turned in</div>
+                </div>
+                <div class="sw-stat-divider"></div>
+                <div class="sw-stat-box">
+                  <div class="sw-stat-number">{{ assignedCount }}</div>
+                  <div class="sw-stat-label">Assigned</div>
+                </div>
+                <div class="sw-stat-divider"></div>
+                <div class="sw-stat-box">
+                  <div class="sw-stat-number">{{ gradedCount }}</div>
+                  <div class="sw-stat-label">Graded</div>
+                </div>
+              </div>
+              
+              <div class="sw-toggle-row">
+                <div class="toggle-container">
+                  <mat-slide-toggle color="primary" [checked]="true"></mat-slide-toggle>
+                </div>
+                <span class="toggle-label">Accepting submissions</span>
+                <mat-icon class="info-icon">info_outline</mat-icon>
+              </div>
+
+              <div class="sw-filter-row">
+                <div class="filter-dropdown-btn" [matMenuTriggerFor]="filterMenu">
+                  <span>{{ currentFilter }}</span>
+                  <mat-icon>arrow_drop_down</mat-icon>
+                </div>
+                <mat-menu #filterMenu="matMenu" class="custom-filter-menu">
+                  <button mat-menu-item (click)="currentFilter = 'All'" class="active-menu-item">All</button>
+                  <button mat-menu-item (click)="currentFilter = 'Turned in'" disabled>Turned in</button>
+                  <button mat-menu-item (click)="currentFilter = 'Assigned'" disabled>Assigned</button>
+                  <button mat-menu-item (click)="currentFilter = 'Graded'" disabled>Graded</button>
+                </mat-menu>
+                <mat-icon class="folder-icon">folder_open</mat-icon>
+              </div>
+
+              <ng-container *ngIf="!selectedStudentForPreview">
+                <div class="sw-empty-state" *ngIf="studentsList.length === 0">
+                  <div class="sw-empty-icon-wrapper">
+                    <mat-icon class="sw-empty-icon">inbox</mat-icon>
+                  </div>
+                  <div class="sw-empty-text">This hasn't been assigned to any students</div>
+                  <button mat-button color="primary" class="invite-btn">
+                    <mat-icon>person_add</mat-icon> Invite students
+                  </button>
+                </div>
+                
+                <div class="sw-submissions-grid" *ngIf="studentsList.length > 0">
+                  <div class="sw-submission-card" *ngFor="let student of studentsList" (click)="selectedStudentForPreview = student">
+                    <div class="sw-submission-thumbnail">
+                      <div class="placeholder-img" *ngIf="student.attachmentUrl"></div>
+                    </div>
+                    <div class="sw-submission-info">
+                      <div class="sw-submission-student">{{ student.firstName }} {{ student.lastName }}</div>
+                      <div class="sw-submission-status" [class.turned-in]="student.status === 'Turned in'">
+                        {{ student.status }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="selectedStudentForPreview">
+                <div class="sw-preview-header">
+                  <div class="sw-preview-student-name">{{ selectedStudentForPreview.firstName }} {{ selectedStudentForPreview.lastName }}</div>
+                  <div class="sw-preview-grade-box">
+                    <span *ngIf="selectedStudentForPreview.status === 'Graded'" class="sw-preview-score">{{ draftGrades[selectedStudentForPreview.userId] }}/100</span>
+                    <span *ngIf="selectedStudentForPreview.status !== 'Graded'" class="sw-preview-no-grade">No grade</span>
+                  </div>
+                  <button mat-icon-button (click)="selectedStudentForPreview = null"><mat-icon>close</mat-icon></button>
+                </div>
+                <div class="sw-preview-status">
+                  {{ selectedStudentForPreview.status }} <span class="see-history">(See history)</span>
+                </div>
+                
+                <div class="sw-preview-attachment-card" *ngIf="selectedStudentForPreview.attachmentUrl" (click)="openGradingViewer(selectedStudentForPreview.userId)">
+                  <div class="attachment-icon"><mat-icon>image</mat-icon></div>
+                  <div class="attachment-details">
+                    <div class="attachment-title">{{ assignment.title }}</div>
+                    <div class="attachment-type">Attachment</div>
+                  </div>
+                  <div class="attachment-thumbnail"></div>
+                </div>
+                
+                <div class="sw-preview-comments-section">
+                  <div class="comment-input-area">
+                    <div class="comment-avatar small">{{ currentUserInitial }}</div>
+                    <input type="text" placeholder="Add private comment..." class="private-comment-box">
+                    <button mat-icon-button class="send-private-btn"><mat-icon>send</mat-icon></button>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          
+        </div>
+      </mat-tab>
+      </mat-tab-group>
+    </ng-container>
+
+    <!-- STUDENT VIEW: Split Layout -->
+    <ng-container *ngIf="role === 'Student'">
+      <div class="student-view-container">
+        <!-- Left Side: Assignment Details -->
+        <div class="student-left-col">
+          <div class="assignment-header">
+            <div class="header-icon-col">
+              <div class="assignment-icon-circle">
+                <mat-icon>assignment</mat-icon>
+              </div>
+            </div>
+            <div class="header-text-col">
+              <div class="title-row">
+                <h1 class="assignment-title">{{ assignment.title }}</h1>
+                <button mat-icon-button class="more-btn">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+              </div>
+              <div class="author-row">
+                <span class="author-name">{{ currentUserName }}</span>
+                <span class="dot-separator">&middot;</span>
+                <span class="post-time">{{ assignment.createdAt | date:'shortTime' }}</span>
+              </div>
+              <div class="points-row" *ngIf="submissionStatus !== 'Graded'">
+                <span class="points-text">{{ assignment.points ? assignment.points + ' points' : 'Ungraded' }}</span>
+                <span class="due-text" *ngIf="assignment.dueDate">Due {{ assignment.dueDate | date:'mediumDate' }}</span>
+              </div>
+              <div class="points-row graded-score-row" *ngIf="submissionStatus === 'Graded'">
+                <span class="points-text graded-score-text">{{ mySubmissionScore }}/{{ assignment.points || 100 }}</span>
+              </div>
+              <mat-divider class="header-divider"></mat-divider>
+            </div>
+          </div>
+
+          <div class="assignment-body">
+            <div class="assignment-description" *ngIf="assignment.description" [innerHTML]="assignment.description">
+            </div>
+          </div>
+          
+          <mat-divider class="section-divider"></mat-divider>
+
+          <div class="class-comments-section">
+            <div class="comments-header">
+              <mat-icon>group</mat-icon>
+              <span>{{ assignment.comments?.length || 0 }} Class comments</span>
+            </div>
+            
+            <div class="comments-list" *ngIf="assignment.comments?.length">
+              <div class="comment-item" *ngFor="let c of assignment.comments">
+                <div class="comment-avatar small">{{ (c.userName || 'U').charAt(0).toUpperCase() }}</div>
+                <div class="comment-content-area">
+                  <div class="comment-meta">
+                    <span class="comment-author">{{ c.userName }}</span>
+                    <span class="comment-time">{{ c.createdAt | date:'shortTime' }}</span>
+                  </div>
+                  <div class="comment-text">{{ c.comment }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comment-input-area">
+              <div class="comment-avatar">
+                {{ currentUserInitial }}
+              </div>
+              <div class="comment-input-box">
+                <textarea 
+                  placeholder="Add class comment..." 
+                  [(ngModel)]="newComment"
+                  rows="1"></textarea>
+                <div class="comment-toolbar" *ngIf="newComment">
+                  <button mat-icon-button><mat-icon>format_bold</mat-icon></button>
+                  <button mat-icon-button><mat-icon>format_italic</mat-icon></button>
+                  <button mat-icon-button><mat-icon>format_underlined</mat-icon></button>
+                  <button mat-icon-button><mat-icon>format_list_bulleted</mat-icon></button>
+                  <button mat-icon-button><mat-icon>format_clear</mat-icon></button>
+                </div>
+              </div>
+              <button mat-icon-button class="send-btn" [class.active]="newComment" (click)="sendComment()">
+                <mat-icon>send</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Your Work & Private Comments -->
+        <div class="student-right-col">
+          <div class="your-work-card">
+            <div class="your-work-header">
+              <h2>Your work</h2>
+              <span class="status-text" [class.turned-in]="submissionStatus === 'Turned in'" [class.graded]="submissionStatus === 'Graded'">{{ submissionStatus }}</span>
+            </div>
+            
+            <button mat-stroked-button class="add-create-btn" *ngIf="submissionStatus !== 'Turned in'" [matMenuTriggerFor]="addCreateMenu">
+              <mat-icon>add</mat-icon> Add or create
+            </button>
+            
+            <mat-menu #addCreateMenu="matMenu" class="add-create-dropdown">
+              <button mat-menu-item (click)="triggerGoogleDrive()">
+                <mat-icon class="google-drive-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg" alt="Drive" width="20"></mat-icon>
+                <span>Google Drive</span>
+              </button>
+              <button mat-menu-item (click)="triggerLink()">
+                <mat-icon>link</mat-icon>
+                <span>Link</span>
+              </button>
+              <button mat-menu-item (click)="fileInput.click()">
+                <mat-icon>attach_file</mat-icon>
+                <span>File</span>
+              </button>
+              <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)">
+              
+              <mat-divider></mat-divider>
+              <div class="menu-section-title">Create new</div>
+              
+              <button mat-menu-item>
+                <mat-icon class="docs-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/0/01/Google_Docs_logo_%282014-2020%29.svg" alt="Docs" width="20"></mat-icon>
+                <span>Docs</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon class="slides-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Google_Slides_logo_%282014-2020%29.svg" alt="Slides" width="20"></mat-icon>
+                <span>Slides</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon class="sheets-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/3/30/Google_Sheets_logo_%282014-2020%29.svg" alt="Sheets" width="20"></mat-icon>
+                <span>Sheets</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon class="drawings-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Google_Drawings_logo_%282014-2020%29.svg" alt="Drawings" width="20"></mat-icon>
+                <span>Drawings</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon color="primary">play_circle_filled</mat-icon>
+                <span>Vids</span>
+              </button>
+            </mat-menu>
+            
+            <!-- Unsubmitted/Graded attachment preview -->
+            <div *ngIf="attachedFileUrl && submissionStatus !== 'Turned in'" class="attachment-preview">
+              <mat-icon>attachment</mat-icon>
+              <span class="attachment-name">{{ attachedFileName }}</span>
+              <button mat-icon-button (click)="removeAttachment()"><mat-icon>close</mat-icon></button>
+            </div>
+
+            <!-- Turned in attachment preview -->
+            <div *ngIf="attachedFileUrl && submissionStatus === 'Turned in'" class="turned-in-attachment-card" (click)="openAttachment(attachedFileUrl)">
+              <div class="turned-in-attachment-content">
+                <div class="turned-in-attachment-title">{{ attachedFileName }}</div>
+                <div class="turned-in-attachment-type">Link</div>
+              </div>
+              <div class="turned-in-attachment-image">
+                <div class="placeholder-image"></div>
+              </div>
+            </div>
+
+            <button *ngIf="submissionStatus === 'Assigned'"
+                    mat-flat-button color="primary" class="mark-done-btn" 
+                    [disabled]="isSubmitting" 
+                    (click)="openTurnInDialog()">
+              {{ attachedFileUrl ? 'Turn in' : 'Mark as done' }}
+            </button>
+
+            <button *ngIf="submissionStatus === 'Turned in'"
+                    mat-stroked-button color="primary" class="mark-done-btn unsubmit-btn" 
+                    [disabled]="isSubmitting" 
+                    (click)="unsubmit()">
+              Unsubmit
+            </button>
+
+            <button *ngIf="submissionStatus === 'Graded'"
+                    mat-flat-button color="primary" class="mark-done-btn" 
+                    [disabled]="isSubmitting" 
+                    (click)="openTurnInDialog()">
+              Resubmit
+            </button>
+          </div>
+
+          <div class="private-comments-card">
+            <div class="private-comments-header">
+              <mat-icon>person_outline</mat-icon>
+              <span>Private comments</span>
+            </div>
+
+            <div class="private-comments-list" *ngIf="mySubmissionComments.length">
+              <div class="comment-item" *ngFor="let c of mySubmissionComments">
+                <div class="comment-avatar small">{{ (c.userName || 'U').charAt(0).toUpperCase() }}</div>
+                <div class="comment-content-area">
+                  <div class="comment-meta">
+                    <span class="comment-author">{{ c.userName }}</span>
+                    <span class="comment-time">{{ c.createdAt | date:'shortTime' }}</span>
+                  </div>
+                  <div class="comment-text">{{ c.comment }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="private-comment-input">
+              <div class="comment-avatar small">{{ currentUserInitial }}</div>
+              <input type="text" placeholder="Add private comment..." class="private-comment-box" [(ngModel)]="newPrivateComment">
+              <button mat-icon-button class="send-private-btn" [disabled]="!newPrivateComment" (click)="sendPrivateComment()">
+                <mat-icon>send</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+  <ng-template #turnInDialog>
+    <div class="turn-in-dialog-content">
+      <h2 mat-dialog-title>Turn in your work?</h2>
+      <mat-dialog-content>
+        <p *ngIf="attachedFileUrl" class="dialog-desc">1 attachment will be submitted for "{{ assignment.title }}".</p>
+        <p *ngIf="!attachedFileUrl" class="dialog-desc">No work attached for "{{ assignment.title }}".</p>
+        
+        <div *ngIf="attachedFileUrl" class="dialog-attachment-preview">
+          <mat-icon>link</mat-icon>
+          <a [href]="attachedFileUrl" target="_blank" class="attachment-name">{{ attachedFileName }}</a>
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close color="primary">Cancel</button>
+        <button mat-button color="primary" (click)="confirmTurnIn()">Turn in</button>
+      </mat-dialog-actions>
+    </div>
+  </ng-template>
+
+  <ng-template #returnDialog>
+    <div class="return-dialog-content">
+      <h2 mat-dialog-title>Return work to {{ selectedStudents.size }} student{{ selectedStudents.size > 1 ? 's' : '' }}?</h2>
+      <mat-dialog-content>
+        <p class="dialog-desc">Student will be notified and can check any grade you've left.</p>
+        
+        <div class="dialog-student-list">
+          <div class="dialog-student-item" *ngFor="let student of getSelectedStudentsList()">
+            <div class="sw-student-avatar">{{ student.firstName.charAt(0) }}</div>
+            <span class="dialog-student-name">{{ student.firstName }} {{ student.lastName }}</span>
+            <span class="dialog-student-score">{{ draftGrades[student.userId] || '0' }}/100</span>
+          </div>
+        </div>
+
+        <div class="dialog-private-comment">
+          <input type="text" placeholder="Add private comment..." [(ngModel)]="returnComment" class="private-comment-box">
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close color="primary" [disabled]="isReturning">Cancel</button>
+        <button mat-flat-button color="primary" (click)="returnWork()" [disabled]="isReturning">
+          {{ isReturning ? 'Returning...' : 'Return' }}
+        </button>
+      </mat-dialog-actions>
+    </div>
+  </ng-template>
+
+  </ng-container>
+
+  <ng-template #loadingOrError>
+    <div style="padding: 48px; text-align: center; color: #5f6368;">
+      <p>Loading assignment or assignment not found...</p>
+    </div>
+  </ng-template>
+</div>

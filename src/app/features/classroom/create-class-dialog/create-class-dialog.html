@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Create class</h2>
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="createForm" class="dialog-form">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Class name (required)</mat-label>
+      <input matInput formControlName="name" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Section</mat-label>
+      <input matInput formControlName="section">
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Level(s)</mat-label>
+      <mat-select formControlName="levels">
+        <mat-option *ngFor="let level of levelOptions" [value]="level">{{ level }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Subject</mat-label>
+      <input matInput formControlName="subject">
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Room</mat-label>
+      <input matInput formControlName="room">
+    </mat-form-field>
+  </form>
+  <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="createForm.invalid || isLoading" (click)="onCreate()">Create</button>
+</mat-dialog-actions>

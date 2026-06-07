@@ -1,0 +1,109 @@
+.todo-page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid #dadce0;
+}
+
+.menu-btn {
+  margin-right: 16px;
+  color: #5f6368;
+}
+
+.header-title {
+  font-family: "Google Sans", Arial, sans-serif;
+  font-size: 22px;
+  color: #3c4043;
+}
+
+.todo-content {
+  flex: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  padding-top: 16px;
+}
+
+.filter-row {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  padding: 0 16px;
+}
+
+.class-filter {
+  width: 300px;
+}
+
+::ng-deep .class-filter .mat-mdc-form-field-infix {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  min-height: 48px;
+}
+
+.tab-body {
+  padding: 0 16px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 64px;
+  text-align: center;
+}
+
+.empty-img {
+  width: 300px;
+  margin-bottom: 24px;
+}
+
+.empty-text {
+  font-family: "Google Sans", Arial, sans-serif;
+  font-size: 16px;
+  color: #3c4043;
+}
+
+.assignment-list {
+  background: white;
+}
+
+.assignment-item {
+  border-bottom: 1px solid #dadce0;
+}
+
+.assignment-item:last-child {
+  border-bottom: none;
+}
+
+.assignment-icon {
+  background-color: #e8f0fe;
+  color: #1967d2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.assignment-title {
+  font-family: "Google Sans", Arial, sans-serif;
+  font-weight: 500;
+  color: #3c4043;
+}
+
+.assignment-meta {
+  color: #5f6368;
+  font-size: 13px;
+}
+
+.missing-text {
+  color: #d93025;
+  font-weight: 500;
+}

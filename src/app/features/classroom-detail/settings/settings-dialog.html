@@ -1,0 +1,189 @@
+<div class="settings-modal">
+  <div class="settings-header">
+    <button mat-icon-button (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <span class="settings-title">Class settings</span>
+    <span class="spacer"></span>
+    <button mat-button class="save-btn" [disabled]="isSaving || !settings.className" (click)="onSave()">Save</button>
+  </div>
+
+  <div class="settings-content">
+    
+    <!-- Class Details Section -->
+    <div class="settings-section-card">
+      <h2 class="section-heading">Class Details</h2>
+      <div class="form-container">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Class name (required)</mat-label>
+          <input matInput [(ngModel)]="settings.className" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Class description</mat-label>
+          <input matInput [(ngModel)]="settings.description">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Section</mat-label>
+          <input matInput [(ngModel)]="settings.section">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Level(s)</mat-label>
+          <mat-select [(ngModel)]="settings.levels">
+            <mat-option *ngFor="let level of levelOptions" [value]="level">{{ level }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Subject</mat-label>
+          <input matInput [(ngModel)]="settings.subject">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Room</mat-label>
+          <input matInput [(ngModel)]="settings.room">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- General Section -->
+    <div class="settings-section-card">
+      <h2 class="section-heading">General</h2>
+      
+      <div class="sub-section">
+        <h3 class="sub-heading">Invite codes</h3>
+        <div class="setting-row flex-row">
+          <div class="setting-info">
+            <div class="setting-label">Manage invite codes</div>
+            <div class="setting-hint">Settings apply to both invite links and class codes</div>
+          </div>
+          <mat-slide-toggle [(ngModel)]="settings.inviteCodesEnabled" color="primary"></mat-slide-toggle>
+        </div>
+
+        <div class="setting-row flex-row">
+          <div class="setting-label">Invite link</div>
+          <div class="setting-value flex-end">
+            <span class="value-text">https://classroom.google.com/c/{{settings.classCode}}</span>
+            <mat-icon class="icon-btn">content_copy</mat-icon>
+          </div>
+        </div>
+
+        <div class="setting-row flex-row">
+          <div class="setting-label">Class code</div>
+          <div class="setting-value flex-end">
+            <span class="value-text code-text">{{settings.classCode}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub-section">
+        <h3 class="sub-heading">Stream and classwork</h3>
+        <div class="setting-row flex-row">
+          <div class="setting-label">Stream</div>
+          <mat-form-field appearance="fill" class="dropdown-field">
+            <mat-select [(ngModel)]="settings.streamPostPermission">
+              <mat-option value="Students can post and comment">Students can post and comment</mat-option>
+              <mat-option value="Students can only comment">Students can only comment</mat-option>
+              <mat-option value="Only teachers can post or comment">Only teachers can post or comment</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="setting-row flex-row">
+          <div class="setting-label">Classwork on the Stream</div>
+          <mat-form-field appearance="fill" class="dropdown-field">
+            <mat-select [(ngModel)]="settings.classworkOnStream">
+              <mat-option value="Show condensed notifications">Show condensed notifications</mat-option>
+              <mat-option value="Show attachments and details">Show attachments and details</mat-option>
+              <mat-option value="Hide notifications">Hide notifications</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="setting-row flex-row">
+          <div class="setting-info">
+            <div class="setting-label">Show deleted items</div>
+            <div class="setting-hint">Only teachers can view deleted items.</div>
+          </div>
+          <mat-slide-toggle [(ngModel)]="settings.showDeletedItems" color="primary"></mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meet Link Section -->
+    <div class="settings-section-card">
+      <h2 class="section-heading flex-align">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Google_Meet_icon_%282020%29.svg" class="meet-icon" /> Manage Meet link
+      </h2>
+      <div class="sub-section">
+        <div class="setting-label">Classroom Meet link</div>
+        <ul class="meet-list">
+          <li>Teachers or co-teachers are always meeting hosts</li>
+          <li>Students will be sent to the waiting room until a teacher is present in the meeting</li>
+          <li>Video participants outside of your class can ask to be admitted by the host</li>
+        </ul>
+        <div class="info-banner">
+          <mat-icon>info</mat-icon>
+          <span>You don't have permission to create or edit the Meet link. Contact your admin to get access.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grading Section -->
+    <div class="settings-section-card">
+      <h2 class="section-heading">Grading</h2>
+      
+      <div class="sub-section">
+        <h3 class="sub-heading">Draft grade for missing assignments</h3>
+        <div class="setting-hint mb-16">
+          When a student hasn't turned in their submission by the due date, or you have marked the submission as missing, it will automatically receive a draft grade. Students won't see this grade until you return it.
+        </div>
+        <div class="setting-row flex-row">
+          <div class="setting-label">Automatically apply a draft grade to Missing assignments</div>
+          <mat-slide-toggle [(ngModel)]="settings.applyDraftGradeToMissing" color="primary"></mat-slide-toggle>
+        </div>
+        
+        <mat-form-field appearance="fill" class="short-field" *ngIf="settings.applyDraftGradeToMissing">
+          <mat-label>Default grade</mat-label>
+          <input matInput type="number" [(ngModel)]="settings.missingAssignmentDefaultGrade">
+          <span matTextSuffix>%</span>
+        </mat-form-field>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub-section">
+        <h3 class="sub-heading">Grade calculation</h3>
+        <div class="setting-row flex-row align-top">
+          <div class="setting-info">
+            <div class="setting-label">Overall grade calculation</div>
+            <div class="setting-hint">Choose a grading system.</div>
+          </div>
+          <mat-form-field appearance="fill" class="dropdown-field">
+            <mat-select [(ngModel)]="settings.overallGradeCalculation">
+              <mat-option value="No overall grade">No overall grade</mat-option>
+              <mat-option value="Total points">Total points</mat-option>
+              <mat-option value="Weighted by category">Weighted by category</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="setting-row flex-row">
+          <div class="setting-label">Show overall grade to students</div>
+          <mat-slide-toggle [(ngModel)]="settings.showOverallGradeToStudents" [disabled]="settings.overallGradeCalculation === 'No overall grade'" color="primary"></mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub-section">
+        <h3 class="sub-heading">Grade categories</h3>
+        <button mat-button color="primary" class="add-category-btn">Add grade category</button>
+      </div>
+    </div>
+  </div>
+</div>

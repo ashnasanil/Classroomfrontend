@@ -1,0 +1,49 @@
+<div class="to-review-wrapper">
+  <div class="to-review-container">
+
+
+  <mat-tab-group class="custom-tabs" animationDuration="0ms" mat-stretch-tabs="false">
+    <mat-tab label="To review">
+      <div class="tab-content">
+        <div class="filter-container">
+          <mat-form-field appearance="outline" class="class-select">
+            <mat-select [(value)]="selectedClassroomId">
+              <mat-option value="all">All classes</mat-option>
+              <mat-option *ngFor="let cls of classrooms" [value]="cls.id">
+                {{ cls.className }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="empty-state">
+          <mat-icon class="empty-icon">assignment</mat-icon>
+          <div class="empty-title">Nothing to review right now</div>
+          <div class="empty-subtitle">This is where you can track assignments<br>and other work across all your classes</div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Reviewed">
+      <div class="tab-content">
+        <div class="filter-container">
+          <mat-form-field appearance="outline" class="class-select">
+            <mat-select [(value)]="selectedClassroomId">
+              <mat-option value="all">All classes</mat-option>
+              <mat-option *ngFor="let cls of classrooms" [value]="cls.id">
+                {{ cls.className }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="empty-state">
+          <mat-icon class="empty-icon">done_all</mat-icon>
+          <div class="empty-title">No reviewed work yet</div>
+          <div class="empty-subtitle">This is where you'll see work you've<br>marked as reviewed</div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  </div>
+</div>

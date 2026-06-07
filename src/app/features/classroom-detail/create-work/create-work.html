@@ -1,0 +1,208 @@
+<div class="create-work-container">
+  
+  <!-- Top Toolbar -->
+  <div class="top-toolbar">
+    <div class="toolbar-left">
+      <button mat-icon-button (click)="close()" class="close-btn" aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div class="icon-circle">
+        <mat-icon>assignment</mat-icon>
+      </div>
+      <span class="toolbar-title">Assignment</span>
+    </div>
+    <div class="toolbar-right">
+      <div class="split-button">
+        <button mat-flat-button class="assign-btn" [disabled]="!title" (click)="assign()">
+          Assign
+        </button>
+        <button mat-flat-button class="dropdown-btn" [disabled]="!title" [matMenuTriggerFor]="assignMenu">
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+      </div>
+      <mat-menu #assignMenu="matMenu">
+        <button mat-menu-item>Schedule</button>
+        <button mat-menu-item>Save draft</button>
+        <button mat-menu-item>Discard draft</button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-layout">
+    
+    <!-- Left Column (Editor) -->
+    <div class="left-column">
+      
+      <!-- Content Card -->
+      <div class="editor-card">
+        
+        <div class="input-container">
+          <mat-form-field appearance="fill" class="full-width title-field hide-underline">
+            <mat-label>Title *</mat-label>
+            <input matInput [(ngModel)]="title" required>
+          </mat-form-field>
+          <div class="required-text">*Required</div>
+        </div>
+
+        <div class="input-container instructions-container">
+          <div class="rich-text-wrapper">
+            <div 
+              #editor
+              class="rich-text-editor" 
+              contenteditable="true" 
+              [attr.data-placeholder]="instructions ? '' : 'Instructions (optional)'"
+              (input)="instructions = editor.innerHTML">
+            </div>
+          </div>
+          <!-- Rich text toolbar -->
+          <div class="rich-text-toolbar">
+            <button mat-icon-button matTooltip="Bold" aria-label="Bold" (click)="execCommand('bold')"><mat-icon>format_bold</mat-icon></button>
+            <button mat-icon-button matTooltip="Italic" aria-label="Italic" (click)="execCommand('italic')"><mat-icon>format_italic</mat-icon></button>
+            <button mat-icon-button matTooltip="Underline" aria-label="Underline" (click)="execCommand('underline')"><mat-icon>format_underlined</mat-icon></button>
+            <button mat-icon-button matTooltip="Bulleted List" aria-label="Bulleted List" (click)="execCommand('insertUnorderedList')"><mat-icon>format_list_bulleted</mat-icon></button>
+            <button mat-icon-button matTooltip="Clear Formatting" aria-label="Clear Formatting" (click)="execCommand('removeFormat')"><mat-icon>format_clear</mat-icon></button>
+          </div>
+        </div>
+
+        <!-- Quiz Attachment (Only for Quiz Assignment) -->
+        <div class="quiz-attachment" *ngIf="isQuiz">
+          <div class="quiz-card" routerLink="/form-builder/new">
+            <div class="quiz-icon-container">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Google_Forms_2020_Logo.svg" alt="Google Forms">
+            </div>
+            <div class="quiz-info">
+              <span class="quiz-title">Blank Quiz</span>
+              <span class="quiz-subtitle">Google Forms</span>
+            </div>
+            <button mat-icon-button class="quiz-close" aria-label="Remove Quiz" (click)="removeQuiz(); $event.stopPropagation();">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attachments Section -->
+      <div class="attachments-card">
+        <div class="attachments-header">
+          <span class="attach-title">Attach</span>
+        </div>
+        
+        <div class="attach-actions">
+          <button mat-icon-button class="attach-circle-btn" (click)="addDriveFile()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png" />
+            <span class="attach-label">Drive</span>
+          </button>
+          <button mat-icon-button class="attach-circle-btn" (click)="addYouTube()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" />
+            <span class="attach-label">YouTube</span>
+          </button>
+          
+          <button mat-icon-button class="attach-circle-btn" [matMenuTriggerFor]="createMenu">
+            <div class="create-plus">
+              <div class="bar horizontal"></div>
+              <div class="bar vertical"></div>
+            </div>
+            <span class="attach-label">Create</span>
+          </button>
+          <mat-menu #createMenu="matMenu">
+            <button mat-menu-item (click)="createDoc('Docs')"><mat-icon>description</mat-icon> Docs</button>
+            <button mat-menu-item (click)="createDoc('Slides')"><mat-icon>slideshow</mat-icon> Slides</button>
+            <button mat-menu-item (click)="createDoc('Sheets')"><mat-icon>table_chart</mat-icon> Sheets</button>
+            <button mat-menu-item (click)="createDoc('Drawings')"><mat-icon>brush</mat-icon> Drawings</button>
+            <button mat-menu-item (click)="createDoc('Forms')"><mat-icon>receipt</mat-icon> Forms</button>
+          </mat-menu>
+
+          <input type="file" #fileUpload multiple (change)="onFileSelected($event)" style="display: none">
+          <button mat-icon-button class="attach-circle-btn" (click)="fileUpload.click()">
+            <mat-icon>upload</mat-icon>
+            <span class="attach-label">Upload</span>
+          </button>
+          <button mat-icon-button class="attach-circle-btn" (click)="addLink()">
+            <mat-icon>link</mat-icon>
+            <span class="attach-label">Link</span>
+          </button>
+        </div>
+
+        <!-- Attached Files List -->
+        <div class="files-list" *ngIf="attachedFiles.length > 0">
+          <div class="file-item" *ngFor="let fileObj of attachedFiles; let i = index">
+            <div class="file-icon-container">
+              <mat-icon *ngIf="fileObj.type === 'file'">insert_drive_file</mat-icon>
+              <mat-icon *ngIf="fileObj.type === 'link'">link</mat-icon>
+              <mat-icon *ngIf="fileObj.type === 'youtube'" style="color: red;">play_circle_filled</mat-icon>
+              <mat-icon *ngIf="fileObj.type === 'drive'" style="color: #4285f4;">{{ fileObj.icon || 'description' }}</mat-icon>
+            </div>
+            <div class="file-info">
+              <span class="file-name">{{ fileObj.name }}</span>
+            </div>
+            <button mat-icon-button class="file-remove" (click)="removeFile(i)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Sidebar (Settings) -->
+    <div class="right-column">
+      
+      <div class="setting-group">
+        <label class="setting-label">For</label>
+        <mat-form-field appearance="fill" class="full-width dropdown-field">
+          <mat-select value="class">
+            <mat-option value="class">Ashna's Math Class 10c</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Assign to</label>
+        <button mat-stroked-button class="assign-to-btn">
+          <mat-icon>people_outline</mat-icon> All students
+        </button>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Points</label>
+        <mat-form-field appearance="fill" class="full-width dropdown-field short-dropdown">
+          <mat-select [(ngModel)]="points">
+            <mat-option value="100">100</mat-option>
+            <mat-option value="ungraded">Ungraded</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Due</label>
+        <mat-form-field appearance="fill" class="full-width dropdown-field">
+          <mat-select placeholder="No due date">
+            <mat-option value="none">No due date</mat-option>
+            <mat-option value="custom">Custom date...</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Topic</label>
+        <mat-form-field appearance="fill" class="full-width dropdown-field">
+          <mat-select [(ngModel)]="topic">
+            <mat-option value="No topic">No topic</mat-option>
+            <mat-option value="Create topic">Create topic</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Rubric</label>
+        <button mat-stroked-button class="rubric-btn">
+          <mat-icon>add</mat-icon> Rubric
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

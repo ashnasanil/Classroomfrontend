@@ -1,0 +1,214 @@
+.classwork-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding-top: 24px;
+}
+
+.classwork-actions {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.teacher-actions {
+  display: flex;
+  align-items: center;
+}
+
+.student-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* Push to right */
+  gap: 16px;
+}
+
+.view-work-btn {
+  border-radius: 24px;
+  height: 36px;
+  font-family: "Google Sans", Arial, sans-serif;
+  font-weight: 500;
+}
+
+.collapse-all-btn {
+  font-family: "Google Sans", Arial, sans-serif;
+  color: #1a73e8;
+  font-weight: 500;
+}
+
+.create-btn {
+  border-radius: 24px; /* Google's pill shape */
+  padding: 0 24px 0 16px;
+  height: 48px;
+  font-family: "Google Sans", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .25px;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 48px;
+}
+
+.empty-img {
+  width: 250px;
+  margin-bottom: 24px;
+}
+
+.empty-title {
+  font-family: "Google Sans", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #3c4043;
+  margin-bottom: 8px;
+}
+
+.empty-subtitle {
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 14px;
+  color: #5f6368;
+}
+
+.classwork-content {
+  margin-top: 16px;
+}
+
+.topic-group {
+  margin-bottom: 48px;
+}
+
+.topic-header {
+  font-family: "Google Sans", Arial, sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: #1967d2;
+  margin: 0 0 16px 0;
+  padding: 0 16px;
+}
+
+.topic-divider {
+  margin-bottom: 16px;
+}
+
+.assignments-accordion {
+  border-radius: 8px;
+}
+
+.assignment-panel {
+  border-bottom: 1px solid #dadce0;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.assignment-panel:first-of-type {
+  border-top: 1px solid #dadce0;
+}
+
+.assignment-icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fce8e6;
+  color: #d93025;
+  margin-right: 16px;
+}
+
+.assignment-title {
+  font-family: "Google Sans", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3c4043;
+}
+
+.assignment-date {
+  font-size: 12px;
+  color: #5f6368;
+  margin-right: 16px;
+}
+
+::ng-deep .assignment-panel .mat-expansion-panel-header {
+  padding: 0 16px;
+  height: 64px !important;
+}
+
+::ng-deep .assignment-panel .mat-expansion-panel-header-title {
+  align-items: center;
+}
+
+::ng-deep .assignment-panel .mat-expansion-panel-header-description {
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.expanded-content {
+  padding: 16px 0;
+}
+
+.assignment-meta {
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: #5f6368;
+}
+
+.assignment-body {
+  display: flex;
+  justify-content: space-between;
+}
+
+.assignment-instructions {
+  flex: 1;
+  font-size: 14px;
+  color: #3c4043;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  padding-right: 24px;
+}
+
+.assignment-stats {
+  display: flex;
+  align-items: center;
+  border-left: 1px solid #dadce0;
+  padding-left: 24px;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 80px;
+}
+
+.stat-number {
+  font-family: "Google Sans", Arial, sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: #3c4043;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #5f6368;
+  margin-top: 4px;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 48px;
+  background-color: #dadce0;
+  margin: 0 24px;
+}
+
+::ng-deep .assignment-action-row {
+  justify-content: flex-start !important;
+  padding: 16px !important;
+  border-top: 1px solid #dadce0;
+}

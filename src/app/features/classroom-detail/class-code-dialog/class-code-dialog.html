@@ -1,0 +1,31 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <span class="dialog-title">Class code</span>
+    <button mat-icon-button (click)="close()" class="close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  
+  <div class="dialog-content">
+    <div class="code-display">
+      {{ data.classroom.classCode }}
+    </div>
+  </div>
+
+  <div class="dialog-footer">
+    <div class="class-info">
+      <span class="class-name">{{ data.classroom.className }}</span>
+      <span class="class-section" *ngIf="data.classroom.section">{{ data.classroom.section }}</span>
+    </div>
+    
+    <div class="actions">
+      <button mat-button color="primary" class="copy-link-btn" (click)="copyLink()">
+        <mat-icon>content_copy</mat-icon>
+        Copy invite link
+      </button>
+      <button mat-icon-button class="fullscreen-exit-btn" (click)="close()">
+        <mat-icon>fullscreen_exit</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="people-container" *ngIf="classroom">
+
+  <div class="people-section">
+    <div class="section-header">
+      <h2 class="section-title">Teachers</h2>
+      <button mat-icon-button *ngIf="role === 'Teacher'" class="invite-btn" matTooltip="Invite teachers" (click)="openInviteDialog('teachers')">
+        <mat-icon>person_add</mat-icon>
+      </button>
+    </div>
+    
+    <div class="person-row">
+      <div class="person-avatar">{{ classroom.teacherName ? classroom.teacherName.charAt(0) : 'T' }}</div>
+      <div class="person-name">{{ classroom.teacherName || 'Teacher' }}</div>
+      <div class="spacer"></div>
+    </div>
+  </div>
+
+  <div class="people-section">
+    <div class="section-header students-header">
+      <h2 class="section-title">{{ role === 'Teacher' ? 'Students' : 'Classmates' }}</h2>
+      <div class="students-count">{{ students.length }} {{ role === 'Teacher' ? (students.length === 1 ? 'student' : 'students') : (students.length === 1 ? 'classmate' : 'classmates') }}</div>
+      <button mat-icon-button *ngIf="role === 'Teacher'" class="invite-btn" matTooltip="Invite students" (click)="openInviteDialog('students')">
+        <mat-icon>person_add</mat-icon>
+      </button>
+    </div>
+    
+    <div class="students-list" *ngIf="students.length > 0">
+      <div class="person-row" *ngFor="let student of students; let last = last">
+        <div class="person-avatar">{{ student.firstName ? student.firstName.charAt(0).toUpperCase() : 'S' }}</div>
+        <div class="person-name">{{ student.firstName }} {{ student.lastName }}</div>
+        <div class="spacer"></div>
+        <mat-divider *ngIf="!last"></mat-divider>
+      </div>
+    </div>
+
+    <div class="empty-students" *ngIf="students.length === 0">
+      <div *ngIf="role === 'Teacher'" class="empty-state-content">
+        <div class="empty-icon-wrapper">
+          <mat-icon class="empty-icon">menu_book</mat-icon>
+        </div>
+        <div class="empty-text">Add students to this class</div>
+        <button mat-button color="primary" class="invite-action-btn" (click)="openInviteDialog('students')">
+          <mat-icon>person_add</mat-icon> Invite students
+        </button>
+      </div>
+      <div *ngIf="role === 'Student'" class="empty-state-content">
+        <div class="empty-icon-wrapper">
+          <mat-icon class="empty-icon">people_outline</mat-icon>
+        </div>
+        <div class="empty-text">No other students have joined yet.</div>
+      </div>
+    </div>
+  </div>
+
+</div>

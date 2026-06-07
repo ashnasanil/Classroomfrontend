@@ -1,0 +1,222 @@
+<div class="stream-container" *ngIf="classroom">
+  
+  <div class="hero-section-wrapper">
+    <!-- Hero Banner -->
+    <div class="hero-banner" [class.info-open]="showClassInfo" [style.background-color]="getBackground(classroom.id)">
+    <div class="hero-content">
+      <h1 class="hero-title">{{ classroom.className }}</h1>
+      <h2 class="hero-section">{{ classroom.section }}</h2>
+    </div>
+    <div class="hero-actions">
+      <button mat-flat-button class="customize-btn" *ngIf="role === 'Teacher'" (click)="openCustomizeDialog()">
+        <mat-icon>edit</mat-icon>
+        Customize
+      </button>
+    </div>
+    <button mat-icon-button class="info-btn" (click)="showClassInfo = !showClassInfo">
+      <mat-icon>info_outline</mat-icon>
+    </button>
+  </div>
+
+  <div class="class-info-dropdown" *ngIf="showClassInfo">
+    <div class="info-row" *ngIf="role === 'Teacher'">
+      <span class="info-label">Class code</span>
+      <span class="info-value">{{ classroom.classCode }}</span>
+      <button mat-icon-button class="expand-code-btn" (click)="openClassCodeDialog()">
+        <mat-icon>fullscreen</mat-icon>
+      </button>
+    </div>
+    <div class="info-row" *ngIf="classroom.subject">
+      <span class="info-label">Subject</span>
+      <span class="info-value">{{ classroom.subject }}</span>
+    </div>
+      <div class="info-row" *ngIf="classroom.room">
+        <span class="info-label">Room</span>
+        <span class="info-value">{{ classroom.room }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stream-content">
+    
+    <!-- Left Sidebar area (Upcoming box) -->
+    <div class="stream-sidebar">
+      <!-- Class code box (only for teachers) -->
+      <mat-card class="sidebar-card" *ngIf="role === 'Teacher'">
+        <div class="class-code-header">Class code</div>
+        <div class="class-code-value">
+          {{ classroom.classCode }}
+          <button mat-icon-button class="copy-btn" (click)="openClassCodeDialog()">
+            <mat-icon>fullscreen</mat-icon>
+          </button>
+        </div>
+      </mat-card>
+
+      <!-- Upcoming box -->
+      <mat-card class="sidebar-card upcoming-card">
+        <div class="upcoming-header">Upcoming</div>
+        <p class="upcoming-text">Woohoo, no work due in soon!</p>
+        <div class="upcoming-actions">
+          <a class="view-all-link" (click)="navigateToReview()" style="cursor: pointer;">View all</a>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Main Feed area -->
+    <div class="stream-feed">
+      
+      <!-- Action Buttons -->
+      <div class="stream-actions">
+        <!-- New Announcement visible to both -->
+        <button mat-flat-button class="new-announcement-btn" (click)="openAnnouncementDialog()">
+          <mat-icon>edit</mat-icon>
+          New announcement
+        </button>
+        <!-- Repost only for Teacher -->
+        <button mat-button class="repost-btn" *ngIf="role === 'Teacher'" (click)="openRepostDialog()">
+          <mat-icon>repeat</mat-icon>
+          Repost
+        </button>
+      </div>
+
+      <!-- Stream Items List -->
+      <div class="stream-posts" *ngIf="announcements && announcements.length > 0">
+        <ng-container *ngFor="let post of announcements">
+          
+          <!-- ANNOUNCEMENT CARD -->
+          <div class="stream-post-card" *ngIf="post.type === 'announcement'">
+            <div class="post-header">
+              <div class="post-avatar" [style.background-color]="getBackground(post.teacherId)">
+                {{ post.teacherName ? post.teacherName.charAt(0).toUpperCase() : 'U' }}
+              </div>
+              <div class="post-header-text">
+                <div class="post-author">{{ post.teacherName }}</div>
+                <div class="post-date">{{ post.createdAt | date:'shortTime' }}</div>
+              </div>
+              <button mat-icon-button class="post-more-btn">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </div>
+            <div class="post-content">
+              {{ post.content }}
+            </div>
+            
+            <div class="post-attachments" *ngIf="post.parsedAttachments?.length">
+              <div class="attachment-card" *ngFor="let att of post.parsedAttachments">
+                <a [href]="att.url" target="_blank" class="attachment-link">
+                  <div class="attachment-icon-wrapper">
+                    <mat-icon *ngIf="att.type === 'drive'" class="att-icon drive">add_to_drive</mat-icon>
+                    <mat-icon *ngIf="att.type === 'youtube'" class="att-icon youtube">ondemand_video</mat-icon>
+                    <mat-icon *ngIf="att.type === 'upload'" class="att-icon upload">insert_drive_file</mat-icon>
+                    <mat-icon *ngIf="att.type === 'link'" class="att-icon link">link</mat-icon>
+                  </div>
+                  <div class="att-details">
+                    <span class="att-title">{{ att.title || att.url }}</span>
+                    <span class="att-type">{{ att.type | uppercase }}</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+            
+            <mat-divider></mat-divider>
+            
+            <div class="post-comments-list" *ngIf="post.comments?.length">
+              <div class="comment-item" *ngFor="let comment of post.comments">
+                <div class="comment-avatar" [style.background-color]="getBackground(comment.userId)">
+                  {{ comment.userName ? comment.userName.charAt(0).toUpperCase() : 'U' }}
+                </div>
+                <div class="comment-content">
+                  <div class="comment-header">
+                    <span class="comment-author">{{ comment.userName }}</span>
+                    <span class="comment-time">{{ comment.createdAt | date:'shortTime' }}</span>
+                  </div>
+                  <div class="comment-text">{{ comment.content }}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="post-comments-section">
+              <div class="comment-input-container">
+                <div class="comment-avatar" [style.background-color]="getBackground(classroom.teacherId || 1)">
+                  {{ role === 'Teacher' ? (classroom.teacherName ? (classroom.teacherName || '').charAt(0).toUpperCase() : 'A') : 'S' }}
+                </div>
+                <div class="comment-input-box" [class.focused]="post.commentFocused">
+                  <textarea 
+                    class="comment-input" 
+                    placeholder="Add class comment..." 
+                    [(ngModel)]="post.newComment"
+                    (focus)="post.commentFocused = true"
+                    (blur)="post.commentFocused = false"
+                    rows="1"></textarea>
+                  <div class="comment-toolbar" *ngIf="post.commentFocused || post.newComment">
+                    <button mat-icon-button><mat-icon>format_bold</mat-icon></button>
+                    <button mat-icon-button><mat-icon>format_italic</mat-icon></button>
+                    <button mat-icon-button><mat-icon>format_underlined</mat-icon></button>
+                    <button mat-icon-button><mat-icon>format_list_bulleted</mat-icon></button>
+                    <button mat-icon-button><mat-icon>format_clear</mat-icon></button>
+                  </div>
+                </div>
+                <button mat-icon-button class="send-comment-btn" [class.active]="post.newComment" (click)="addComment(post)">
+                  <mat-icon>send</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ASSIGNMENT CARD -->
+          <div class="stream-assignment-card" *ngIf="post.type === 'assignment'">
+            <div class="assignment-card-content" [routerLink]="['/classroom', classroomId, 'assignment', post.id]">
+              <div class="assignment-icon-circle">
+                <mat-icon>assignment</mat-icon>
+              </div>
+              <div class="assignment-text">
+                <div class="assignment-title">{{ post.teacherName || 'Teacher' }} posted a new assignment: {{ post.title }}</div>
+                <div class="assignment-date">{{ post.createdAt | date:'mediumDate' }}</div>
+              </div>
+            </div>
+            <button mat-icon-button class="assignment-more-btn" [matMenuTriggerFor]="assignmentStreamMenu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #assignmentStreamMenu="matMenu">
+              <button mat-menu-item *ngIf="role === 'Teacher'" (click)="editAssignment(post.id)">Edit</button>
+              <button mat-menu-item *ngIf="role === 'Teacher'" (click)="deleteAssignment(post.id)">Delete</button>
+              <button mat-menu-item (click)="copyAssignmentLink(post.id)">Copy link</button>
+            </mat-menu>
+          </div>
+
+          <!-- MATERIAL CARD -->
+          <div class="stream-assignment-card" *ngIf="post.type === 'material'">
+            <div class="assignment-card-content" [routerLink]="['/classroom', classroomId, 'material', post.id]">
+              <div class="assignment-icon-circle">
+                <mat-icon>book</mat-icon>
+              </div>
+              <div class="assignment-text">
+                <div class="assignment-title">{{ post.teacherName || 'Teacher' }} posted a new material: {{ post.title }}</div>
+                <div class="assignment-date">{{ post.createdAt | date:'mediumDate' }}</div>
+              </div>
+            </div>
+            <button mat-icon-button class="assignment-more-btn">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- Placeholder when stream is empty -->
+      <div class="empty-stream" *ngIf="!announcements || announcements.length === 0">
+        <mat-icon class="empty-icon">chat</mat-icon>
+        <div class="empty-text">This is where you can talk to your class</div>
+        <div class="empty-subtext">Use the stream to share announcements, assignments, and questions with your class</div>
+        <div class="empty-actions">
+          <button mat-stroked-button color="primary" class="stream-settings-btn">
+            <mat-icon>settings</mat-icon>
+            Stream settings
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

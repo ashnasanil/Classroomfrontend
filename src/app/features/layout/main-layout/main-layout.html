@@ -1,0 +1,230 @@
+<div class="app-layout">
+  <mat-toolbar class="main-toolbar">
+    <div class="toolbar-left">
+      <button mat-icon-button (click)="toggleSidenav()" aria-label="Toggle menu" class="menu-button">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div class="logo-container" routerLink="/dashboard">
+        <img src="https://www.gstatic.com/images/branding/product/1x/classroom_32dp.png" alt="Classroom Logo" class="classroom-logo" />
+        <span class="classroom-text">Classroom</span>
+      </div>
+      <div class="page-title" *ngIf="pageTitle">
+        <mat-icon class="page-title-separator">chevron_right</mat-icon>
+        <span class="page-title-text">{{ pageTitle }}</span>
+      </div>
+    </div>
+
+    <span class="spacer"></span>
+
+    <div class="toolbar-right">
+      <button mat-icon-button [matMenuTriggerFor]="addMenu" aria-label="Create or join class">
+        <mat-icon>add</mat-icon>
+      </button>
+      <mat-menu #addMenu="matMenu">
+        <button mat-menu-item (click)="openJoinClassDialog()">
+          <span>Join class</span>
+        </button>
+        <button mat-menu-item (click)="openCreateClassDialog()">
+          <span>Create class</span>
+        </button>
+      </mat-menu>
+
+      <button mat-icon-button [matMenuTriggerFor]="appsMenu" aria-label="Google apps" class="apps-button">
+        <mat-icon>apps</mat-icon>
+      </button>
+      <mat-menu #appsMenu="matMenu" class="google-apps-menu" xPosition="before">
+        <div class="apps-menu-container" (click)="$event.stopPropagation()">
+          <div class="apps-section">
+            <div class="apps-section-header">
+              <span>Your favorites</span>
+              <button mat-icon-button class="edit-btn">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+            <div class="apps-grid">
+              <div class="app-item" (click)="onAppClick('Account')">
+                <div class="app-icon-placeholder">A</div>
+                <span class="app-name">Account</span>
+              </div>
+              <div class="app-item" (click)="onAppClick('Drive')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png" alt="Drive" class="app-icon" />
+                <span class="app-name">Drive</span>
+              </div>
+              <div class="app-item" (click)="onAppClick('Gmail')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail" class="app-icon" />
+                <span class="app-name">Gmail</span>
+              </div>
+              <div class="app-item" (click)="onAppClick('YouTube')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube" class="app-icon" />
+                <span class="app-name">YouTube</span>
+              </div>
+              <div class="app-item" (click)="onAppClick('Gemini')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg" alt="Gemini" class="app-icon" />
+                <span class="app-name">Gemini</span>
+              </div>
+              <div class="app-item" (click)="onAppClick('Maps')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Google_Maps_Logo_2020.svg" alt="Maps" class="app-icon" />
+                <span class="app-name">Maps</span>
+              </div>
+              <div class="app-item" (click)="onAppClick('Search')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Search" class="app-icon" />
+                <span class="app-name">Search</span>
+              </div>
+              <div class="app-item" (click)="onAppClick('Calendar')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg" alt="Calendar" class="app-icon" />
+                <span class="app-name">Calendar</span>
+              </div>
+              <div class="app-item" (click)="onAppClick('News')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_News_icon.svg" alt="News" class="app-icon" />
+                <span class="app-name">News</span>
+              </div>
+              <div class="app-item" (click)="onAppClick('Photos')">
+                <img src="https://www.gstatic.com/images/branding/product/1x/photos_64dp.png" alt="Photos" class="app-icon" />
+                <span class="app-name">Photos</span>
+              </div>
+              <div class="app-item" (click)="onAppClick('Meet')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Google_Meet_icon_%282020%29.svg" alt="Meet" class="app-icon" />
+                <span class="app-name">Meet</span>
+              </div>
+              <div class="app-item" (click)="onAppClick('Translate')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" alt="Translate" class="app-icon" />
+                <span class="app-name">Translate</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-menu>
+
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="avatar-button" aria-label="User account">
+        <div class="avatar-ring">
+          <div class="avatar">{{ username ? username.charAt(0).toUpperCase() : 'U' }}</div>
+        </div>
+      </button>
+      <mat-menu #userMenu="matMenu" class="google-profile-menu">
+        <div class="profile-header" (click)="$event.stopPropagation()">
+          <div class="profile-email">{{ username || 'user@gmail.com' }}</div>
+          <div class="profile-avatar-container">
+            <div class="profile-avatar-ring">
+              <div class="profile-avatar-large">{{ username ? username.charAt(0).toUpperCase() : 'U' }}</div>
+            </div>
+            <div class="profile-camera-icon">
+              <mat-icon>camera_alt</mat-icon>
+            </div>
+          </div>
+          <div class="profile-greeting">Hi, {{ username ? username.split('@')[0] : 'User' }}!</div>
+          <button mat-stroked-button class="manage-account-btn">Manage your Google Account</button>
+        </div>
+        
+        <div class="profile-actions">
+          <button mat-menu-item class="add-account-btn">
+            <mat-icon>add</mat-icon>
+            <span>Add account</span>
+          </button>
+          <button mat-menu-item class="sign-out-btn" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Sign out</span>
+          </button>
+        </div>
+
+        <div class="profile-footer" (click)="$event.stopPropagation()">
+          <a href="#">Privacy Policy</a>
+          <span class="dot">•</span>
+          <a href="#">Terms of Service</a>
+        </div>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="side" opened="true" [class.mini]="!isExpanded" class="sidenav">
+    <mat-nav-list class="sidebar-list">
+      <!-- Home -->
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span matListItemTitle *ngIf="isExpanded">Home</span>
+      </a>
+      <!-- Calendar -->
+      <a mat-list-item routerLink="/calendar" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon matListItemIcon>calendar_today</mat-icon>
+        <span matListItemTitle *ngIf="isExpanded">Calendar</span>
+      </a>
+
+      <mat-divider></mat-divider>
+
+      <!-- Teaching -->
+      <ng-container *ngIf="isExpanded">
+        <div mat-subheader class="sidebar-header">
+          <span>Teaching</span>
+          <mat-icon>expand_less</mat-icon>
+        </div>
+        <a mat-list-item routerLink="/to-review" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>assignment_turned_in</mat-icon>
+          <span matListItemTitle>To review</span>
+        </a>
+        <!-- Dynamic Taught Classes -->
+        <a mat-list-item *ngFor="let cls of taughtClasses" [routerLink]="['/classroom', cls.id]" routerLinkActive="active-link">
+          <div matListItemIcon class="sidebar-avatar" [style.background-color]="getBackground(cls.id)">
+            {{ cls.className.charAt(0).toUpperCase() }}
+          </div>
+          <span matListItemTitle class="sidebar-class-title">{{ cls.className }}</span>
+          <span matListItemLine class="sidebar-class-section">{{ cls.section }}</span>
+        </a>
+      </ng-container>
+      <ng-container *ngIf="!isExpanded">
+        <a mat-list-item routerLink="/to-review" title="Teaching" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>person_outline</mat-icon>
+        </a>
+      </ng-container>
+
+      <mat-divider *ngIf="isExpanded && enrolledClasses.length > 0"></mat-divider>
+
+      <!-- Enrolled -->
+      <ng-container *ngIf="isExpanded && enrolledClasses.length > 0">
+        <div mat-subheader class="sidebar-header">
+          <span>Enrolled</span>
+          <mat-icon>expand_less</mat-icon>
+        </div>
+        <a mat-list-item>
+          <mat-icon matListItemIcon>assignment</mat-icon>
+          <span matListItemTitle>To-do</span>
+        </a>
+        <!-- Dynamic Enrolled Classes -->
+        <a mat-list-item *ngFor="let cls of enrolledClasses" [routerLink]="['/classroom', cls.id]" routerLinkActive="active-link">
+          <div matListItemIcon class="sidebar-avatar" [style.background-color]="getBackground(cls.id + 1)">
+            {{ cls.className.charAt(0).toUpperCase() }}
+          </div>
+          <span matListItemTitle class="sidebar-class-title">{{ cls.className }}</span>
+          <span matListItemLine class="sidebar-class-section">{{ cls.section }}</span>
+        </a>
+      </ng-container>
+      <ng-container *ngIf="!isExpanded && enrolledClasses.length > 0">
+        <a mat-list-item title="Enrolled">
+          <mat-icon matListItemIcon>school</mat-icon>
+        </a>
+      </ng-container>
+
+      <mat-divider></mat-divider>
+
+      <!-- Archived classes -->
+      <a mat-list-item routerLink="/archived-classes" routerLinkActive="active-link" title="Archived classes">
+        <mat-icon matListItemIcon>archive</mat-icon>
+        <span matListItemTitle *ngIf="isExpanded">Archived classes</span>
+      </a>
+
+      <!-- Settings -->
+      <a mat-list-item routerLink="/settings" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon matListItemIcon>settings</mat-icon>
+        <span matListItemTitle *ngIf="isExpanded">Settings</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+
+    <!-- Main Content Area -->
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

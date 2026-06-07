@@ -1,0 +1,55 @@
+<div class="student-work-container" *ngIf="!isLoading && studentWork">
+  
+  <div class="profile-header">
+    <div class="large-avatar">
+      {{ studentWork.profile.firstName ? studentWork.profile.firstName.charAt(0).toUpperCase() : (studentWork.profile.lastName ? studentWork.profile.lastName.charAt(0).toUpperCase() : 'U') }}
+    </div>
+    <div class="profile-name">
+      {{ studentWork.profile.firstName }} {{ studentWork.profile.lastName }}
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <!-- Filter Dropdown -->
+    <div class="filter-dropdown-wrapper">
+      <mat-form-field appearance="outline" class="task-filter-field" subscriptSizing="dynamic">
+        <mat-label>Task filter</mat-label>
+        <mat-select [value]="selectedFilter" (selectionChange)="onFilterChange($event)">
+          <mat-option value="All">All</mat-option>
+          <mat-option value="Assigned">Assigned</mat-option>
+          <mat-option value="Returned">Returned</mat-option>
+          <mat-option value="Missing">Missing</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Assignments List -->
+    <div class="assignments-list">
+      <div class="assignment-item" *ngFor="let item of filteredItems">
+        <div class="item-left">
+          <div class="item-title">
+            {{ item.title }}
+            <mat-icon class="attachment-icon">attachment</mat-icon> <span class="attachment-count">1</span>
+          </div>
+          <div class="item-due-date">{{ item.dueDate ? (item.dueDate | date:'mediumDate') : 'No due date' }}</div>
+        </div>
+        <div class="item-right">
+          <div class="item-grade">
+            <span *ngIf="item.grade !== null && item.grade !== undefined">{{ item.grade }}/{{ item.maxPoints || 100 }}</span>
+            <span *ngIf="item.grade === null || item.grade === undefined" [class.missing]="item.state === 'Missing'">
+              {{ item.state }}
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="empty-state" *ngIf="filteredItems.length === 0">
+        No work matches this filter.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading-state" *ngIf="isLoading">
+  Loading your work...
+</div>

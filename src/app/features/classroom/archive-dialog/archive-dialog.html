@@ -1,0 +1,41 @@
+<h2 mat-dialog-title class="dialog-title">Archive classes?</h2>
+
+<mat-dialog-content>
+  <div class="warnings-container">
+    <div class="warning-item">
+      <mat-icon>visibility_off</mat-icon>
+      <span>Archiving a class causes it to be archived for all participants and will unlink your SIS if your class is linked.</span>
+    </div>
+    <div class="warning-item">
+      <mat-icon>lock</mat-icon>
+      <span>Archived classes can't be modified by teachers or students unless they are restored.</span>
+    </div>
+    <div class="warning-item">
+      <mat-icon>visibility</mat-icon>
+      <span>Teachers can still preview and export items from your Classwork page if it's been shared with them.</span>
+    </div>
+    <div class="warning-item">
+      <mat-icon>add_to_drive</mat-icon>
+      <span>Class files will remain in Google Drive.</span>
+    </div>
+  </div>
+
+  <div class="classes-list-header">
+    The following classes will move to your Archived classes:
+  </div>
+
+  <div class="class-summary">
+    <div class="avatar-circle">
+      {{ data.classroom.className.charAt(0).toUpperCase() }}
+    </div>
+    <div class="class-details">
+      <div class="class-name">{{ data.classroom.className }}</div>
+      <div class="class-section">{{ data.classroom.section }}</div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button (click)="onCancel()" class="cancel-btn">Cancel</button>
+  <button mat-button (click)="onArchive()" class="archive-btn">Archive</button>
+</mat-dialog-actions>

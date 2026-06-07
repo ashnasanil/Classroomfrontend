@@ -1,0 +1,111 @@
+<div class="classwork-container">
+  
+  <div class="classwork-actions">
+    <!-- Teacher Actions -->
+    <div *ngIf="role === 'Teacher'" class="teacher-actions">
+      <button mat-flat-button color="primary" class="create-btn" [matMenuTriggerFor]="createMenu">
+        <mat-icon>add</mat-icon> Create
+      </button>
+      <mat-menu #createMenu="matMenu">
+        <button mat-menu-item [routerLink]="['/classroom', classroomId, 'create']">
+          <mat-icon>assignment</mat-icon> Assignment
+        </button>
+        <button mat-menu-item [routerLink]="['/classroom', classroomId, 'create']" [queryParams]="{type: 'quiz'}">
+          <mat-icon>assignment</mat-icon> Quiz assignment
+        </button>
+        <button mat-menu-item [routerLink]="['/classroom', classroomId, 'create']">
+          <mat-icon>live_help</mat-icon> Question
+        </button>
+        <button mat-menu-item [routerLink]="['/classroom', classroomId, 'create']">
+          <mat-icon>book</mat-icon> Material
+        </button>
+        <button mat-menu-item [routerLink]="['/classroom', classroomId, 'create']">
+          <mat-icon>repeat</mat-icon> Reuse post
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item>
+          <mat-icon>view_list</mat-icon> Topic
+        </button>
+      </mat-menu>
+    </div>
+
+    <!-- Student/Shared Actions -->
+    <div class="student-actions">
+      <button mat-stroked-button class="view-work-btn" *ngIf="role === 'Student'" [routerLink]="['/to-do']">
+        <mat-icon>contact_page</mat-icon> View your work
+      </button>
+      <button mat-button class="collapse-all-btn">
+        <mat-icon>unfold_less</mat-icon> Collapse all
+      </button>
+    </div>
+  </div>
+
+  <div class="classwork-content" *ngIf="assignmentsByTopic.length > 0; else emptyState">
+    <div class="topic-group" *ngFor="let group of assignmentsByTopic">
+      <h2 class="topic-header">{{ group.topic }}</h2>
+      <mat-divider class="topic-divider"></mat-divider>
+      
+      <mat-accordion displayMode="flat" multi="false" class="assignments-accordion">
+        <mat-expansion-panel *ngFor="let assignment of group.assignments" class="assignment-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="assignment-icon-circle">
+                <mat-icon>{{ assignment.type === 'material' ? 'book' : 'assignment' }}</mat-icon>
+              </div>
+              <span class="assignment-title">{{ assignment.title }}</span>
+            </mat-panel-title>
+            <mat-panel-description>
+              <span class="assignment-date" *ngIf="assignment.createdAt">Posted {{ assignment.createdAt | date:'shortTime' }}</span>
+              <button mat-icon-button (click)="$event.stopPropagation()" [matMenuTriggerFor]="assignmentMenu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #assignmentMenu="matMenu">
+                <button mat-menu-item *ngIf="role === 'Teacher'" (click)="editAssignment(assignment.id)">Edit</button>
+                <button mat-menu-item *ngIf="role === 'Teacher'" (click)="deleteAssignment(assignment.id)">Delete</button>
+                <button mat-menu-item (click)="copyLink(assignment.id)">Copy link</button>
+              </mat-menu>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="expanded-content">
+            <div class="assignment-meta">
+              <span class="assignment-due">Due {{ assignment.dueDate ? (assignment.dueDate | date:'mediumDate') : 'No due date' }}</span>
+            </div>
+            
+            <div class="assignment-body">
+              <div class="assignment-instructions">
+                {{ assignment.description || 'No instructions' }}
+              </div>
+              
+              <div class="assignment-stats" *ngIf="role === 'Teacher'">
+                <div class="stat-box">
+                  <div class="stat-number">{{ assignment.turnedInCount || 0 }}</div>
+                  <div class="stat-label">Turned in</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-box">
+                  <div class="stat-number">{{ assignment.assignedCount || 0 }}</div>
+                  <div class="stat-label">Assigned</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <mat-action-row class="assignment-action-row">
+            <button mat-button color="primary" *ngIf="assignment.type === 'assignment'" [routerLink]="['/classroom', classroomId, 'assignment', assignment.id]">View instructions</button>
+            <button mat-button color="primary" *ngIf="assignment.type === 'material'" [routerLink]="['/classroom', classroomId, 'material', assignment.id]">View material</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <img src="https://www.gstatic.com/classroom/empty_states_home.svg" alt="Empty classwork" class="empty-img">
+      <h2 class="empty-title">This is where you'll assign work</h2>
+      <p class="empty-subtitle">You can add assignments and other work for the class, then organize it into topics</p>
+    </div>
+  </ng-template>
+
+</div>

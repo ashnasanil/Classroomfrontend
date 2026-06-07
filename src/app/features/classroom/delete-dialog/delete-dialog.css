@@ -1,0 +1,40 @@
+.dialog-title {
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: #202124;
+  margin-bottom: 24px;
+}
+
+.warnings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.warning-item {
+  color: #3c4043;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.warning-text {
+  color: #d93025;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.dialog-actions {
+  padding: 8px 16px 16px;
+}
+
+.cancel-btn {
+  color: #1967d2;
+  font-weight: 500;
+}
+
+.delete-btn {
+  color: #d93025;
+  font-weight: 500;
+}

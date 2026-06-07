@@ -1,0 +1,341 @@
+<div class="auth-container">
+  <div class="auth-card">
+    
+    <div class="card-left">
+      <div class="google-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+      </div>
+
+      <h1 class="auth-title" *ngIf="currentStep === 1">Create a Google Account</h1>
+      <p class="auth-subtitle" *ngIf="currentStep === 1">Enter your name</p>
+
+      <h1 class="auth-title" *ngIf="currentStep === 2">Basic information</h1>
+      <p class="auth-subtitle" *ngIf="currentStep === 2">Enter your birthday and gender</p>
+
+      <h1 class="auth-title" *ngIf="currentStep === 3">How you'll sign in</h1>
+      <p class="auth-subtitle" *ngIf="currentStep === 3">Create a Gmail address for signing in to your Google Account</p>
+
+      <h1 class="auth-title" *ngIf="currentStep === 4">Create a strong password</h1>
+      <p class="auth-subtitle" *ngIf="currentStep === 4">Create a strong password with a mix of letters, numbers and symbols</p>
+
+      <h1 class="auth-title" *ngIf="currentStep === 5">Add recovery email</h1>
+      <p class="auth-subtitle" *ngIf="currentStep === 5">The address where Google can contact you if there’s unusual activity in your account or if you get locked out.</p>
+
+      <h1 class="auth-title" *ngIf="currentStep === 6 || currentStep === 7">Verify your email address</h1>
+      <p class="auth-subtitle" *ngIf="currentStep === 6">For your security, we want to make sure it's really you. We will send a 6-digit verification code to your email address.</p>
+      <p class="auth-subtitle" *ngIf="currentStep === 7">Enter the 6-digit verification code to confirm you got the email.</p>
+
+      <h1 class="auth-title" *ngIf="currentStep === 8">Review your account info</h1>
+      <p class="auth-subtitle" *ngIf="currentStep === 8">You can use this email address to sign in later</p>
+
+      <h1 class="auth-title" *ngIf="currentStep === 9">Privacy and Terms</h1>
+      
+      <h1 class="auth-title" *ngIf="currentStep === 10">Sync your profile</h1>
+    </div>
+
+    <div class="card-right">
+      <form [formGroup]="registerForm" class="auth-form">
+
+        <!-- Step 1: First Name & Last Name -->
+        <ng-container *ngIf="currentStep === 1">
+          <div class="input-container" style="display: flex; flex-direction: column; gap: 12px;">
+            <mat-form-field appearance="outline" class="full-width custom-input" hideRequiredMarker>
+              <mat-label>First name</mat-label>
+              <input matInput formControlName="firstName" required>
+              <mat-error *ngIf="registerForm.get('firstName')?.hasError('required')">Enter your first name</mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="full-width custom-input" hideRequiredMarker>
+              <mat-label>Last name (optional)</mat-label>
+              <input matInput formControlName="lastName">
+            </mat-form-field>
+          </div>
+
+          <div class="auth-actions mt-auto">
+            <div class="left-actions">
+              <!-- Removed "Sign in instead" as requested -->
+            </div>
+            <div class="right-actions" style="display: flex; justify-content: flex-end; width: 100%;">
+              <button mat-button class="next-button" type="button" (click)="nextStep()">
+                Next
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 2: Basic Info (Birthday, Gender) -->
+        <ng-container *ngIf="currentStep === 2">
+          <div class="input-container" style="display: flex; flex-direction: column; gap: 12px;">
+            <mat-form-field appearance="outline" class="full-width custom-input">
+              <mat-label>Birthday</mat-label>
+              <input matInput type="date" formControlName="birthday">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width custom-input">
+              <mat-label>Gender</mat-label>
+              <mat-select formControlName="gender">
+                <mat-option value="Female">Female</mat-option>
+                <mat-option value="Male">Male</mat-option>
+                <mat-option value="Custom">Custom</mat-option>
+                <mat-option value="PreferNotToSay">Prefer not to say</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="auth-actions mt-auto">
+            <div class="left-actions">
+              <button mat-button class="next-button" style="background: transparent !important; color: #0b57d0 !important; border-radius: 20px !important; box-shadow: none !important;" type="button" (click)="prevStep()">Back</button>
+            </div>
+            <div class="right-actions">
+              <button mat-button class="next-button" type="button" (click)="nextStep()">
+                Next
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 3: Choose Gmail address -->
+        <ng-container *ngIf="currentStep === 3">
+          <div class="input-container">
+            <mat-form-field appearance="outline" class="full-width custom-input">
+              <mat-label>Email address</mat-label>
+              <input matInput formControlName="email" type="email" autocomplete="email" required>
+              <mat-error *ngIf="registerForm.get('email')?.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="registerForm.get('email')?.hasError('email')">Invalid email address</mat-error>
+            </mat-form-field>
+            <p style="color: #5f6368; font-size: 14px; margin-top: 4px;">You can use letters, numbers & periods</p>
+          </div>
+
+          <div class="auth-actions mt-auto">
+            <div class="left-actions">
+              <button mat-button class="next-button" style="background: transparent !important; color: #0b57d0 !important; border-radius: 20px !important; box-shadow: none !important;" type="button" (click)="prevStep()">Back</button>
+            </div>
+            <div class="right-actions">
+              <button mat-button class="next-button" type="button" (click)="nextStep()">
+                Next
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 4: Create a strong password -->
+        <ng-container *ngIf="currentStep === 4">
+          <div class="input-container" style="display: flex; flex-direction: column; gap: 12px;">
+            <mat-form-field appearance="outline" class="full-width custom-input">
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="password" type="password" required>
+              <mat-error *ngIf="registerForm.get('password')?.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">Minimum 6 characters</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width custom-input">
+              <mat-label>Confirm</mat-label>
+              <input matInput formControlName="confirmPassword" type="password" required>
+              <mat-error *ngIf="registerForm.hasError('mismatch')">Passwords must match</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="auth-actions mt-auto">
+            <div class="left-actions">
+              <button mat-button class="next-button" style="background: transparent !important; color: #0b57d0 !important; border-radius: 20px !important; box-shadow: none !important;" type="button" (click)="prevStep()">Back</button>
+            </div>
+            <div class="right-actions">
+              <button mat-button class="next-button" type="button" (click)="nextStep()">
+                Next
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 5: Add recovery email -->
+        <ng-container *ngIf="currentStep === 5">
+          <div class="input-container">
+            <mat-form-field appearance="outline" class="full-width custom-input">
+              <mat-label>Recovery email address</mat-label>
+              <input matInput formControlName="recoveryEmail" type="email">
+            </mat-form-field>
+          </div>
+
+          <div class="auth-actions mt-auto">
+            <div class="left-actions">
+              <button mat-button class="next-button" style="background: transparent !important; color: #0b57d0 !important; border-radius: 20px !important; box-shadow: none !important;" type="button" (click)="nextStep()">Skip</button>
+            </div>
+            <div class="right-actions">
+              <button mat-button class="next-button" type="button" (click)="nextStep()">
+                Next
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 6: Email verification (Simulated) -->
+        <ng-container *ngIf="currentStep === 6">
+          <div class="input-container">
+            <mat-form-field appearance="outline" class="full-width custom-input">
+              <mat-label>Verification email address</mat-label>
+              <input matInput formControlName="verificationEmail" type="email" autocomplete="email" required>
+              <mat-error *ngIf="registerForm.get('verificationEmail')?.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="registerForm.get('verificationEmail')?.hasError('email')">Invalid email address</mat-error>
+            </mat-form-field>
+            <p style="color: #5f6368; font-size: 14px; margin-top: 4px;">Enter an existing email address where we can send a verification code to prove you're not a robot.</p>
+            <div *ngIf="errorMessage" style="color: #d93025; margin-top: 12px; font-size: 14px;">{{ errorMessage }}</div>
+          </div>
+
+          <div class="auth-actions mt-auto">
+            <div class="left-actions">
+              <!-- Removed back and skip buttons -->
+            </div>
+            <div class="right-actions">
+              <button mat-button class="next-button" type="button" (click)="nextStep()" [disabled]="isLoading">
+                <span *ngIf="!isLoading">Next</span>
+                <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 7: Get code from your phone -->
+        <ng-container *ngIf="currentStep === 7">
+          <div class="input-container">
+            <mat-form-field appearance="outline" class="full-width custom-input">
+              <mat-label>Enter code</mat-label>
+              <input matInput formControlName="otp" type="text" placeholder="G-">
+            </mat-form-field>
+            <div *ngIf="errorMessage" style="color: #d93025; margin-top: 12px; font-size: 14px;">{{ errorMessage }}</div>
+          </div>
+
+          <div class="auth-actions mt-auto">
+            <div class="left-actions">
+              <!-- Removed back button -->
+            </div>
+            <div class="right-actions">
+              <button mat-button class="next-button" type="button" (click)="nextStep()" [disabled]="isLoading">
+                <span *ngIf="!isLoading">Next</span>
+                <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 8: Review your account info -->
+        <ng-container *ngIf="currentStep === 8">
+          <div class="input-container">
+            <div style="background-color: #f8f9fa; border: 1px solid #dadce0; border-radius: 8px; padding: 16px;">
+              <div style="margin-bottom: 8px;">
+                <strong>Name:</strong> {{ registerForm.get('firstName')?.value }} {{ registerForm.get('lastName')?.value }}
+              </div>
+              <div>
+                <strong>Email:</strong> {{ registerForm.get('email')?.value }}
+              </div>
+            </div>
+          </div>
+
+          <div class="auth-actions mt-auto">
+            <div class="left-actions">
+              <button mat-button class="next-button" style="background: transparent !important; color: #0b57d0 !important; border-radius: 20px !important; box-shadow: none !important;" type="button" (click)="prevStep()">Back</button>
+            </div>
+            <div class="right-actions">
+              <button mat-button class="next-button" type="button" (click)="nextStep()">
+                Next
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 9: Privacy and Terms -->
+        <ng-container *ngIf="currentStep === 9">
+          <div class="input-container">
+            <p>To create a Google Account, you'll need to agree to the Terms of Service below.</p>
+            <p>In addition, when you create an account, we process your information as described in our Privacy Policy.</p>
+            <div style="margin-top: 16px;">
+              <input type="checkbox" formControlName="agreeTerms" id="agreeTerms">
+              <label for="agreeTerms" style="margin-left: 8px;">I agree to the Google Terms of Service</label>
+            </div>
+          </div>
+
+          <div class="auth-actions mt-auto">
+            <div class="left-actions">
+              <button mat-button class="next-button" style="background: transparent !important; color: #0b57d0 !important; border-radius: 20px !important; box-shadow: none !important;" type="button" (click)="prevStep()">Back</button>
+            </div>
+            <div class="right-actions">
+              <button mat-button class="next-button" type="button" (click)="nextStep()">
+                I agree
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 10: Sync your profile -->
+        <ng-container *ngIf="currentStep === 10">
+          <div class="input-container" style="text-align: center;">
+            <div *ngIf="isLoading" style="margin-top: 32px;">
+              <mat-spinner diameter="40" style="margin: 0 auto;"></mat-spinner>
+              <p style="margin-top: 24px;">Registering your account...</p>
+            </div>
+            
+            <div *ngIf="!isLoading && errorMessage" style="margin-top: 32px;">
+              <svg class="error-icon" viewBox="0 0 24 24" fill="#d93025" style="width:40px;height:40px;margin:0 auto;display:block;">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+              </svg>
+              <h3 style="font-size: 20px; margin: 16px 0 8px 0; color: #d93025;">Error</h3>
+              <p style="color: #444746;">{{ errorMessage }}</p>
+            </div>
+            
+            <div *ngIf="!isLoading && !errorMessage" style="margin-top: 32px;">
+              <svg viewBox="0 0 24 24" fill="#34A853" width="64" height="64" style="margin: 0 auto; display: block; margin-bottom: 16px;">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              <h3 style="font-size: 20px; margin: 0 0 8px 0; color: #1f1f1f;">All set!</h3>
+              <p style="color: #444746;">Your account has been created successfully. Redirecting...</p>
+            </div>
+          </div>
+
+          <div class="auth-actions mt-auto" *ngIf="!isLoading && errorMessage">
+            <div class="left-actions">
+              <button mat-button class="next-button" style="background: transparent !important; color: #0b57d0 !important; border-radius: 20px !important; box-shadow: none !important;" type="button" (click)="currentStep = 9; errorMessage = ''">Back</button>
+            </div>
+            <div class="right-actions">
+              <button mat-button class="next-button" type="button" (click)="onSubmit()">
+                Try again
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="auth-footer">
+    <div class="footer-left">
+      <div class="custom-select-wrapper">
+        <select class="footer-select" [value]="'en-US'">
+          <option value="af">Afrikaans</option>
+          <option value="az">azərbaycan</option>
+          <option value="bs">bosanski</option>
+          <option value="ca">català</option>
+          <option value="cs">Čeština</option>
+          <option value="cy">Cymraeg</option>
+          <option value="da">Dansk</option>
+          <option value="de">Deutsch</option>
+          <option value="et">eesti</option>
+          <option value="en-GB">English (United Kingdom)</option>
+          <option value="en-US">English (United States)</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+        </select>
+        <svg class="select-arrow" focusable="false" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"></path></svg>
+      </div>
+    </div>
+    <div class="footer-right">
+      <a href="https://support.google.com/accounts?hl=en-US" target="_blank">Help</a>
+      <a href="https://policies.google.com/privacy?hl=en-US" target="_blank">Privacy</a>
+      <a href="https://policies.google.com/terms?hl=en-US" target="_blank">Terms</a>
+    </div>
+  </div>
+</div>

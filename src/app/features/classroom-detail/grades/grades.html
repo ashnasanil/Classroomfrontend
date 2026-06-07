@@ -1,0 +1,73 @@
+<div class="grades-container" *ngIf="!isLoading && gradebook">
+  <div class="grades-grid-wrapper">
+    <table class="grades-table">
+      <thead>
+        <tr>
+          <th class="sticky-col top-left-cell">
+            <div class="sort-dropdown" [matMenuTriggerFor]="sortMenu">
+              <span>{{ sortOption === 'lastName' ? 'Sort by last name' : 'Sort by first name' }}</span>
+              <mat-icon class="sort-icon">arrow_drop_down</mat-icon>
+            </div>
+            <mat-menu #sortMenu="matMenu">
+              <button mat-menu-item (click)="onSortChange({value: 'lastName'})">Sort by last name</button>
+              <button mat-menu-item (click)="onSortChange({value: 'firstName'})">Sort by first name</button>
+            </mat-menu>
+          </th>
+          <th *ngFor="let assignment of gradebook.assignments" class="assignment-header">
+            <div class="assignment-header-content">
+              <div class="due-date">{{ assignment.dueDate ? (assignment.dueDate | date:'mediumDate') : 'No due date' }}</div>
+              <div class="title-container">
+                <a class="assignment-title" [routerLink]="['../../assignment', assignment.id]">{{ assignment.title }}</a>
+                <div class="more-btn-container">
+                  <div class="blue-dot"></div>
+                  <button mat-icon-button class="more-btn" [matMenuTriggerFor]="assignmentMenu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </div>
+                <mat-menu #assignmentMenu="matMenu">
+                  <button mat-menu-item (click)="notImplemented()">Edit</button>
+                  <button mat-menu-item (click)="notImplemented()">Delete</button>
+                  <mat-divider></mat-divider>
+                  <button mat-menu-item (click)="notImplemented()">
+                    <span>Grade all</span> <span class="badge-new">New</span>
+                  </button>
+                  <button mat-menu-item (click)="notImplemented()">Mark as complete</button>
+                  <button mat-menu-item (click)="notImplemented()" disabled>Return all</button>
+                </mat-menu>
+              </div>
+              <div class="points">out of {{ assignment.points || 100 }}</div>
+            </div>
+          </th>
+        </tr>
+        <tr class="class-average-row">
+          <td class="sticky-col average-label">
+            <mat-icon>group</mat-icon>
+            <span>Class average</span>
+          </td>
+          <td *ngFor="let assignment of gradebook.assignments" class="grade-cell average-cell">
+            {{ getClassAverage(assignment.id) }}
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of gradebook.students" class="student-row">
+          <td class="sticky-col student-name-cell">
+            <div class="avatar" *ngIf="!student.avatar" [style.background-color]="'#4caf50'">
+              {{ student.firstName ? student.firstName.charAt(0).toUpperCase() : 'S' }}
+            </div>
+            <img class="avatar" *ngIf="student.avatar" [src]="student.avatar" alt="Avatar">
+            <span class="student-name">{{ student.firstName }} {{ student.lastName }}</span>
+          </td>
+          <td *ngFor="let assignment of gradebook.assignments" class="grade-cell">
+            <div class="grade-input-wrapper">
+              <span class="grade-value">{{ getStudentGrade(student.id, assignment.id) }}</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div *ngIf="isLoading" class="loading-state">
+  <p>Loading gradebook...</p>
+</div>

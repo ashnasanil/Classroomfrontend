@@ -1,0 +1,123 @@
+.to-review-wrapper {
+  background-color: #f8f9fa; /* Matches the grey background from the screenshot */
+  height: 100%;
+  padding-top: 24px;
+}
+
+.to-review-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid #dadce0;
+  border-bottom: none;
+  margin: 0 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.menu-icon {
+  margin-right: 16px;
+  color: #5f6368;
+  cursor: pointer;
+}
+
+.header-title {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 22px;
+  color: #3c4043;
+}
+
+.custom-tabs {
+  flex-grow: 1;
+}
+
+::ng-deep .custom-tabs .mat-mdc-tab-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding-left: 24px;
+}
+
+::ng-deep .custom-tabs .mdc-tab__text-label {
+  color: #5f6368 !important;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-weight: 500;
+  letter-spacing: .25px;
+  text-transform: none !important;
+}
+
+::ng-deep .custom-tabs .mdc-tab--active .mdc-tab__text-label {
+  color: #1a73e8 !important;
+}
+
+::ng-deep .custom-tabs .mdc-tab-indicator__content--underline {
+  border-color: #1a73e8 !important;
+  border-width: 3px !important;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.tab-content {
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.filter-container {
+  width: 100%;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+::ng-deep .class-select {
+  width: 300px;
+}
+
+::ng-deep .class-select .mdc-text-field--outlined .mdc-notched-outline {
+  border-color: #1a73e8 !important;
+}
+
+::ng-deep .class-select .mat-mdc-select-value {
+  color: #3c4043;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 14px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 80px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 150px;
+  height: 150px;
+  width: 150px;
+  margin-bottom: 24px;
+  color: #bdc1c6; /* grey color matching the empty state graphic */
+}
+
+.empty-title {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3c4043;
+  margin-bottom: 8px;
+}
+
+.empty-subtitle {
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 14px;
+  color: #3c4043;
+  line-height: 20px;
+}

@@ -1,0 +1,44 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 class="dialog-title">Select class</h2>
+    <button mat-icon-button class="close-btn" mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="dialog-subtitle">
+    Reuse posts from any class you teach. <a href="#">Learn more</a>
+  </div>
+  
+  <div class="dialog-content">
+    <div class="table-header">
+      <div class="col-class">Class</div>
+      <div class="col-teacher">Teacher</div>
+      <div class="col-created">Created</div>
+    </div>
+    
+    <div class="table-body">
+      <div class="class-row" *ngFor="let cls of classes" (click)="selectClass(cls)">
+        <div class="col-class">
+          <div class="class-avatar" [style.background-color]="getBackground(cls.id)">
+            {{ cls.className ? (cls.className || '').charAt(0).toUpperCase() : 'C' }}
+          </div>
+          <div class="class-info">
+            <div class="class-name">{{ cls.className }}</div>
+            <div class="class-section">{{ cls.section }}</div>
+          </div>
+        </div>
+        <div class="col-teacher">
+          {{ cls.teacherName || 'Teacher' }}
+        </div>
+        <div class="col-created">
+          <!-- Real timestamp or placeholder depending on data -->
+          12:03 AM
+        </div>
+      </div>
+      
+      <div class="empty-state" *ngIf="classes.length === 0">
+        No classes found.
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="form-builder-container">
+  
+  <!-- Top Header -->
+  <header class="form-header">
+    <div class="header-left">
+      <div class="form-icon">
+        <mat-icon>description</mat-icon>
+      </div>
+      <span class="form-title">Blank Quiz</span>
+      <mat-icon class="icon-btn">folder_open</mat-icon>
+      <mat-icon class="icon-btn">star_border</mat-icon>
+    </div>
+    
+    <div class="header-center">
+      <nav class="form-tabs">
+        <a class="tab active">Questions</a>
+        <a class="tab">Responses</a>
+        <a class="tab">Settings</a>
+      </nav>
+    </div>
+    
+    <div class="header-right">
+      <span class="total-points">Total points: 0</span>
+      <mat-icon class="icon-btn">palette</mat-icon>
+      <mat-icon class="icon-btn">visibility</mat-icon>
+      <mat-icon class="icon-btn">undo</mat-icon>
+      <mat-icon class="icon-btn">redo</mat-icon>
+      <mat-icon class="icon-btn">link</mat-icon>
+      <mat-icon class="icon-btn">person_add</mat-icon>
+      <button mat-flat-button class="publish-btn">Publish</button>
+      <div class="avatar-circle">A</div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="form-content">
+    
+    <!-- Title Card -->
+    <div class="form-card title-card">
+      <div class="card-top-border"></div>
+      <input type="text" class="card-title-input" value="Blank Quiz">
+      <input type="text" class="card-desc-input" placeholder="Form description">
+      <div class="email-collection-notice">
+        This form is automatically collecting emails from all respondents. <a href="#">Change settings</a>
+      </div>
+    </div>
+
+    <!-- Active Question Card -->
+    <div class="form-card question-card active-card">
+      <div class="active-indicator"></div>
+      
+      <div class="question-row">
+        <input type="text" class="question-title-input" value="Untitled Question">
+        <mat-icon class="question-image-icon">image</mat-icon>
+        
+        <div class="question-type-select">
+          <mat-icon>radio_button_checked</mat-icon>
+          <span>Multiple choice</span>
+          <mat-icon>arrow_drop_down</mat-icon>
+        </div>
+      </div>
+
+      <div class="options-list">
+        <div class="option-row">
+          <mat-icon class="option-icon">radio_button_unchecked</mat-icon>
+          <input type="text" class="option-input" value="Option 1">
+        </div>
+        <div class="option-row add-option-row">
+          <mat-icon class="option-icon">radio_button_unchecked</mat-icon>
+          <input type="text" class="option-input add-option-input" placeholder="Add option" readonly>
+          <span class="or-text">or</span>
+          <span class="add-other-btn">add "Other"</span>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <div class="answer-key-btn">
+          <mat-icon>check_box</mat-icon>
+          <span>Answer key</span>
+          <span class="points-text">(0 points)</span>
+        </div>
+        
+        <div class="action-icons">
+          <mat-icon class="action-icon">content_copy</mat-icon>
+          <mat-icon class="action-icon">delete</mat-icon>
+          <div class="divider"></div>
+          <span class="required-label">Required</span>
+          <div class="toggle-switch"></div>
+          <mat-icon class="action-icon">more_vert</mat-icon>
+        </div>
+      </div>
+      
+      <!-- Floating Toolbar (Attached to Active Card) -->
+      <div class="floating-toolbar">
+        <mat-icon class="toolbar-icon">add_circle</mat-icon>
+        <mat-icon class="toolbar-icon">file_download</mat-icon>
+        <mat-icon class="toolbar-icon">text_fields</mat-icon>
+        <mat-icon class="toolbar-icon">image</mat-icon>
+        <mat-icon class="toolbar-icon">movie</mat-icon>
+        <mat-icon class="toolbar-icon">view_stream</mat-icon>
+      </div>
+
+    </div>
+
+  </main>
+</div>

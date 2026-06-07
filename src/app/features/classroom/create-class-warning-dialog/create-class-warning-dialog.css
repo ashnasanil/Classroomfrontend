@@ -1,0 +1,77 @@
+.dialog-title {
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: #202124;
+  margin-bottom: 16px;
+}
+
+.dialog-content {
+  font-family: Roboto, Arial, sans-serif;
+  color: #5f6368;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.dialog-text {
+  margin-bottom: 16px;
+}
+
+.dialog-link {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.dialog-link:hover {
+  text-decoration: underline;
+}
+
+.checkbox-container {
+  margin-top: 32px;
+  margin-bottom: 8px;
+  background-color: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.checkbox-text {
+  font-family: Roboto, Arial, sans-serif;
+  color: #3c4043;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: normal; /* allow wrapping */
+}
+
+/* Material checkbox override to allow multiline text */
+::ng-deep .agreement-checkbox .mdc-form-field {
+  align-items: flex-start;
+}
+
+::ng-deep .agreement-checkbox .mdc-checkbox {
+  margin-top: -2px; /* align with first line of text */
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 24px;
+}
+
+.action-btn {
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  font-weight: 500;
+  letter-spacing: .25px;
+  text-transform: none;
+}
+
+.go-back-btn {
+  color: #1a73e8;
+}
+
+.continue-btn {
+  color: #1a73e8;
+}
+
+.continue-btn:disabled {
+  color: rgba(0, 0, 0, 0.38);
+}

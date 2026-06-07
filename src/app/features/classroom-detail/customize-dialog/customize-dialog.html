@@ -1,0 +1,38 @@
+<h2 mat-dialog-title class="customize-title">Customize appearance</h2>
+<mat-dialog-content>
+  <div class="preview-banner" [style.background-color]="selectedColor">
+    <div class="preview-content"></div>
+  </div>
+
+  <div class="section-row">
+    <div class="section-label">Select stream header image</div>
+    <div class="section-actions">
+      <button mat-flat-button class="light-blue-btn">
+        <mat-icon>insert_photo</mat-icon> Select photo
+      </button>
+      <button mat-flat-button class="light-blue-btn">
+        <mat-icon>file_upload</mat-icon> Upload photo
+      </button>
+    </div>
+  </div>
+
+  <div class="section-row vertical">
+    <div class="section-label">Select theme color</div>
+    <div class="color-picker-row">
+      <div 
+        class="color-circle" 
+        *ngFor="let color of colors" 
+        [style.border-color]="color"
+        [class.selected]="color === selectedColor"
+        (click)="selectColor(color)">
+        <div class="color-inner" *ngIf="color === selectedColor" [style.background-color]="color">
+          <mat-icon>check</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close class="cancel-btn">Cancel</button>
+  <button mat-button class="save-btn" (click)="save()">Save</button>
+</mat-dialog-actions>

@@ -1,0 +1,89 @@
+<div class="material-detail-container" *ngIf="material && !loading">
+  <div class="detail-header">
+    <div class="header-icon-container">
+      <div class="icon-circle">
+        <mat-icon>book</mat-icon>
+      </div>
+    </div>
+    <div class="header-content">
+      <h1 class="material-title">{{ material.title }}</h1>
+      <div class="material-meta">
+        <span class="author-name">{{ material.teacherName || 'Teacher' }}</span>
+        <span class="dot-separator">•</span>
+        <span class="post-date">{{ material.createdAt | date:'mediumDate' }}</span>
+      </div>
+    </div>
+    <button mat-icon-button class="more-options-btn">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </div>
+
+  <div class="detail-body">
+    <div class="material-description" *ngIf="material.description">
+      {{ material.description }}
+    </div>
+
+    <div class="attachments-section" *ngIf="material.parsedAttachments?.length">
+      <div class="attachment-card" *ngFor="let att of material.parsedAttachments">
+        <a [href]="att.url" target="_blank" class="attachment-link">
+          <div class="attachment-icon-wrapper">
+            <mat-icon *ngIf="att.type === 'drive'" class="att-icon drive">add_to_drive</mat-icon>
+            <mat-icon *ngIf="att.type === 'youtube'" class="att-icon youtube">ondemand_video</mat-icon>
+            <mat-icon *ngIf="att.type === 'upload'" class="att-icon upload">insert_drive_file</mat-icon>
+            <mat-icon *ngIf="att.type === 'link'" class="att-icon link">link</mat-icon>
+          </div>
+          <div class="att-details">
+            <span class="att-title">{{ att.title || att.url }}</span>
+            <span class="att-type">{{ att.type | uppercase }}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+    
+    <div class="comments-section">
+      <div class="comments-header">
+        <mat-icon>people</mat-icon>
+        <span>{{ material.comments?.length || 0 }} Class comments</span>
+      </div>
+
+      <div class="comments-list" *ngIf="material.comments?.length">
+        <div class="comment-item" *ngFor="let c of material.comments" style="display: flex; align-items: flex-start; margin-bottom: 16px;">
+          <div class="user-avatar" style="width: 32px; height: 32px; border-radius: 50%; background-color: #1976d2; color: white; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 14px;">
+            {{ (c.userName || 'U').charAt(0).toUpperCase() }}
+          </div>
+          <div class="comment-content" style="flex: 1;">
+            <div class="comment-meta" style="margin-bottom: 4px;">
+              <span class="author-name" style="font-weight: 500; font-size: 14px; margin-right: 8px;">{{ c.userName }}</span>
+              <span class="comment-time" style="color: #5f6368; font-size: 12px;">{{ c.createdAt | date:'shortTime' }}</span>
+            </div>
+            <div class="comment-text" style="font-size: 14px; color: #3c4043; white-space: pre-wrap;">{{ c.comment }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="add-comment-area" style="display: flex; align-items: center; border-top: 1px solid #e0e0e0; padding-top: 16px;">
+        <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: #e91e63; color: white; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 16px;">
+          {{ currentUserInitial || 'U' }}
+        </div>
+        <div class="comment-input-box" style="flex: 1; display: flex; align-items: center; border: 1px solid #dadce0; border-radius: 24px; padding: 4px 16px;">
+          <input type="text" placeholder="Add class comment..." [(ngModel)]="newComment" style="flex: 1; border: none; outline: none; font-size: 14px; padding: 8px 0; background: transparent;">
+          <button mat-icon-button class="send-btn" (click)="sendComment()" [disabled]="!newComment" style="color: #1976d2;">
+            <mat-icon>send</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading-container" *ngIf="loading">
+  <mat-spinner diameter="40"></mat-spinner>
+</div>
+
+<div class="error-container" *ngIf="error">
+  <mat-icon color="warn">error</mat-icon>
+  <p>{{ error }}</p>
+  <button mat-button (click)="goBack()">Go Back</button>
+</div>

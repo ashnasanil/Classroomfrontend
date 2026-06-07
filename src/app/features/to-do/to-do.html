@@ -1,0 +1,94 @@
+<div class="todo-page-container">
+  
+  <div class="todo-content">
+    <mat-tab-group>
+      <!-- ASSIGNED TAB -->
+      <mat-tab label="Assigned">
+        
+        <div class="filter-row">
+          <mat-form-field appearance="outline" class="class-filter">
+            <mat-select [(ngModel)]="selectedClassroomId" (selectionChange)="onClassroomFilterChange()">
+              <mat-option [value]="null">All classes</mat-option>
+              <mat-option *ngFor="let cls of classrooms" [value]="cls.id">{{ cls.className }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="tab-body">
+          <div *ngIf="assignedWork.length === 0" class="empty-state">
+            <img src="https://ssl.gstatic.com/classroom/empty_states_home.svg" alt="No work" class="empty-img">
+            <div class="empty-text">Woohoo, no work due in soon!</div>
+          </div>
+
+          <mat-nav-list class="assignment-list" *ngIf="assignedWork.length > 0">
+            <mat-list-item *ngFor="let item of assignedWork" [routerLink]="['/classroom', item.classroomId, 'assignment', item.id]" class="assignment-item">
+              <mat-icon matListItemIcon class="assignment-icon">assignment</mat-icon>
+              <div matListItemTitle class="assignment-title">{{ item.title }}</div>
+              <div matListItemLine class="assignment-meta">{{ item.classroomName }} <span *ngIf="item.dueDate">&bull; Due {{ item.dueDate | date:'MMM d' }}</span></div>
+            </mat-list-item>
+          </mat-nav-list>
+        </div>
+
+      </mat-tab>
+
+      <!-- MISSING TAB -->
+      <mat-tab label="Missing">
+        
+        <div class="filter-row">
+          <mat-form-field appearance="outline" class="class-filter">
+            <mat-select [(ngModel)]="selectedClassroomId" (selectionChange)="onClassroomFilterChange()">
+              <mat-option [value]="null">All classes</mat-option>
+              <mat-option *ngFor="let cls of classrooms" [value]="cls.id">{{ cls.className }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="tab-body">
+          <div *ngIf="missingWork.length === 0" class="empty-state">
+            <img src="/images/missing_work_empty.png" alt="No missing work" class="empty-img" style="width: 250px; opacity: 0.8;">
+            <div class="empty-text">Looks like nothing is missing. Nice work!</div>
+          </div>
+
+          <mat-nav-list class="assignment-list" *ngIf="missingWork.length > 0">
+            <mat-list-item *ngFor="let item of missingWork" [routerLink]="['/classroom', item.classroomId, 'assignment', item.id]" class="assignment-item missing">
+              <mat-icon matListItemIcon class="assignment-icon">assignment</mat-icon>
+              <div matListItemTitle class="assignment-title">{{ item.title }}</div>
+              <div matListItemLine class="assignment-meta">{{ item.classroomName }} <span class="missing-text" *ngIf="item.dueDate">&bull; Due {{ item.dueDate | date:'MMM d' }}</span></div>
+            </mat-list-item>
+          </mat-nav-list>
+        </div>
+
+      </mat-tab>
+
+      <!-- DONE TAB -->
+      <mat-tab label="Done">
+        
+        <div class="filter-row">
+          <mat-form-field appearance="outline" class="class-filter">
+            <mat-select [(ngModel)]="selectedClassroomId" (selectionChange)="onClassroomFilterChange()">
+              <mat-option [value]="null">All classes</mat-option>
+              <mat-option *ngFor="let cls of classrooms" [value]="cls.id">{{ cls.className }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="tab-body">
+          <div *ngIf="doneWork.length === 0" class="empty-state">
+            <img src="/images/done_work_empty.png" alt="No done work" class="empty-img" style="width: 250px; opacity: 0.8;">
+            <div class="empty-text">Your work will show here once it's turned in or marked as done</div>
+          </div>
+
+          <mat-nav-list class="assignment-list" *ngIf="doneWork.length > 0">
+            <mat-list-item *ngFor="let item of doneWork" [routerLink]="['/classroom', item.classroomId, 'assignment', item.id]" class="assignment-item">
+              <mat-icon matListItemIcon class="assignment-icon">assignment_turned_in</mat-icon>
+              <div matListItemTitle class="assignment-title">{{ item.title }}</div>
+              <div matListItemLine class="assignment-meta">{{ item.classroomName }} &bull; Turned in</div>
+            </mat-list-item>
+          </mat-nav-list>
+        </div>
+
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+</div>

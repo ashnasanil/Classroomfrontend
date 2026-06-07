@@ -1,0 +1,185 @@
+<div class="gv-container">
+  <!-- Topmost App Bar -->
+  <div class="gv-app-bar">
+    <div class="gv-app-bar-left">
+      <button mat-icon-button (click)="goToAssignmentDashboard()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <span class="gv-assignment-title" *ngIf="assignment">{{ assignment.title }}</span>
+    </div>
+    <div class="gv-app-bar-right">
+      <button mat-icon-button><mat-icon>apps</mat-icon></button>
+      <div class="gv-teacher-avatar">
+        {{ loggedInUserName.charAt(0).toUpperCase() }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Second Bar: Student Selector -->
+  <div class="gv-student-bar">
+    <div class="gv-student-bar-left">
+      <div class="gv-student-selector" (click)="toggleStudentDropdown()" [class.active]="isStudentDropdownOpen">
+        <ng-container *ngIf="currentStudent; else noStudent">
+          <div class="gv-student-avatar">{{ (currentStudent.firstName || 'Student').charAt(0).toUpperCase() }}</div>
+          <span class="gv-student-name">{{ currentStudent.firstName }} {{ currentStudent.lastName }}</span>
+          <div class="gv-student-status-dropdown" [class.turned-in]="currentStudent.status === 'Turned in'">
+            {{ currentStudent.status }}
+            <mat-icon class="gv-dropdown-icon">arrow_drop_up</mat-icon>
+          </div>
+        </ng-container>
+        <ng-template #noStudent>
+          <div class="gv-student-avatar" style="background-color: #ccc;">?</div>
+          <span class="gv-student-name">No student selected</span>
+          <mat-icon class="gv-dropdown-icon" style="color: #5f6368;">arrow_drop_down</mat-icon>
+        </ng-template>
+      </div>
+
+      <!-- Dropdown Menu -->
+      <div class="gv-dropdown-menu" *ngIf="isStudentDropdownOpen">
+        <!-- Sort Header -->
+        <div class="gv-dropdown-sort">
+          <span class="gv-sort-label">Sort by</span>
+          <button class="gv-sort-chip" [class.active]="studentSortBy === 'firstName'" (click)="setSortBy('firstName')">
+            <mat-icon *ngIf="studentSortBy === 'firstName'" class="gv-sort-icon">arrow_upward</mat-icon>
+            First name
+          </button>
+          <button class="gv-sort-chip" [class.active]="studentSortBy === 'lastName'" (click)="setSortBy('lastName')">
+            <mat-icon *ngIf="studentSortBy === 'lastName'" class="gv-sort-icon">arrow_upward</mat-icon>
+            Last name
+          </button>
+          <button class="gv-sort-chip" [class.active]="studentSortBy === 'status'" (click)="setSortBy('status')">
+            <mat-icon *ngIf="studentSortBy === 'status'" class="gv-sort-icon">arrow_upward</mat-icon>
+            Status
+          </button>
+        </div>
+
+        <!-- Student List -->
+        <div class="gv-dropdown-list">
+          <div class="gv-dropdown-item" *ngFor="let student of studentsList" [class.selected]="student.userId === currentStudentId" (click)="selectStudent(student.userId)">
+            <div class="gv-student-avatar-small">{{ (student.firstName || 'S').charAt(0).toUpperCase() }}</div>
+            <span class="gv-item-name">{{ student.firstName }} {{ student.lastName }}</span>
+            <span class="gv-item-status" [class.turned-in]="student.status === 'Turned in'">
+              {{ student.status === 'Graded' ? (student.score + '/100') : student.status }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="gv-nav-arrows">
+        <button mat-icon-button (click)="goToPreviousStudent()" [disabled]="currentStudentIndex === 0">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button mat-icon-button (click)="goToNextStudent()" [disabled]="currentStudentIndex === studentsList.length - 1">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="gv-student-bar-right">
+      <div class="gv-return-split-btn" [class.disabled]="isReturning">
+        <button class="gv-return-btn" (click)="returnGrade()" [disabled]="isReturning">{{ isReturning ? 'Returning...' : 'Return' }}</button>
+        <button class="gv-return-arrow" [disabled]="isReturning"><mat-icon>arrow_drop_down</mat-icon></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="gv-main-content">
+    <!-- Left Document Viewer (Dark Theme) -->
+    <div class="gv-document-viewer">
+      <div class="gv-doc-toolbar" *ngIf="currentStudent?.attachmentUrl">
+        <div class="gv-doc-title">
+          <mat-icon class="gv-doc-icon" style="color: #ea4335">image</mat-icon>
+          <span>{{ currentStudent?.attachmentUrl?.split('/').pop() || 'Attachment' }}</span>
+        </div>
+        <div class="gv-doc-actions">
+          <button mat-icon-button><mat-icon>print</mat-icon></button>
+          <a mat-icon-button [href]="getFullAttachmentUrl(currentStudent?.attachmentUrl)" target="_blank" style="color: inherit" download><mat-icon>download</mat-icon></a>
+          <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
+        </div>
+      </div>
+
+      <div class="gv-doc-preview-area">
+        <ng-container *ngIf="currentStudent?.attachmentUrl; else noAttachment">
+          <img *ngIf="isImage(currentStudent.attachmentUrl)" [src]="getFullAttachmentUrl(currentStudent.attachmentUrl)" class="gv-actual-image-preview" alt="Attachment">
+          
+          <iframe *ngIf="isIframeable(currentStudent.attachmentUrl)" [src]="getSafeUrl(currentStudent.attachmentUrl)" class="gv-actual-iframe-preview" frameborder="0"></iframe>
+
+          <div *ngIf="!isImage(currentStudent.attachmentUrl) && !isIframeable(currentStudent.attachmentUrl)" class="gv-doc-preview-fallback">
+            <div class="gv-preview-error-box">
+              <div class="gv-error-title">Couldn't preview file</div>
+              <div class="gv-error-desc">There was a problem displaying this file.</div>
+              <a [href]="getFullAttachmentUrl(currentStudent.attachmentUrl)" target="_blank" class="gv-download-btn" download>
+                <mat-icon>download</mat-icon> Download
+              </a>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #noAttachment>
+          <div class="gv-doc-preview-fallback">
+            <div class="gv-preview-error-box">
+              <div class="gv-error-title">No attachment</div>
+              <div class="gv-error-desc">This student hasn't attached any files.</div>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="gv-sidebar">
+      <div class="gv-sidebar-section">
+        <div class="gv-sidebar-header-flex">
+          <h3 class="gv-sidebar-heading">Files</h3>
+        </div>
+        <div class="gv-submission-time" *ngIf="currentStudent?.submittedAt">
+          Turned in on {{ currentStudent?.submittedAt | date:'MMM d, h:mm a' }}
+        </div>
+        <div class="gv-submission-time" *ngIf="!currentStudent?.submittedAt && currentStudent?.status === 'Turned in'">
+          Turned in
+        </div>
+        <a href="#" class="gv-see-history">See history</a>
+        
+        <div class="gv-attachment-card" *ngIf="currentStudent?.attachmentUrl" (click)="openAttachment(currentStudent.attachmentUrl)">
+          <mat-icon class="gv-attachment-card-icon">image</mat-icon>
+          <div class="gv-attachment-card-name">{{ currentStudent?.attachmentUrl?.split('/').pop() || 'Attachment' }}</div>
+          <mat-icon class="gv-attachment-open-icon">open_in_new</mat-icon>
+        </div>
+      </div>
+
+      <div class="gv-sidebar-section">
+        <h3 class="gv-sidebar-heading">Grade</h3>
+        <div class="gv-grade-input-container">
+          <input type="number" class="gv-grade-input" [(ngModel)]="draftGrade" placeholder="">
+          <span class="gv-grade-max">/100</span>
+          <button mat-icon-button class="gv-grade-more"><mat-icon>more_vert</mat-icon></button>
+        </div>
+      </div>
+
+      <div class="gv-sidebar-section">
+        <h3 class="gv-sidebar-heading">Private comments</h3>
+
+        <div class="gv-private-comments-list" *ngIf="currentStudent?.comments?.length">
+          <div class="gv-comment-item" *ngFor="let c of currentStudent.comments" style="display: flex; margin-bottom: 12px;">
+            <div class="gv-comment-avatar" style="width: 32px; height: 32px; border-radius: 50%; background-color: #1976d2; color: white; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 14px; flex-shrink: 0;">
+              {{ (c.userName || 'U').charAt(0).toUpperCase() }}
+            </div>
+            <div class="gv-comment-content" style="flex: 1;">
+              <div class="gv-comment-meta" style="margin-bottom: 4px;">
+                <span class="gv-comment-author" style="font-weight: 500; font-size: 13px; margin-right: 8px; color: #3c4043;">{{ c.userName }}</span>
+                <span class="gv-comment-time" style="color: #5f6368; font-size: 12px;">{{ c.createdAt | date:'shortTime' }}</span>
+              </div>
+              <div class="gv-comment-text" style="font-size: 13px; color: #3c4043; white-space: pre-wrap;">{{ c.comment }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gv-private-comment-area">
+          <textarea class="gv-comment-box" placeholder="Add private comment..." [(ngModel)]="privateComment"></textarea>
+          <div class="gv-comment-actions">
+            <button class="gv-post-btn" [class.active]="privateComment && privateComment.length > 0" (click)="sendComment()">Post</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

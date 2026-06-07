@@ -1,0 +1,134 @@
+.student-work-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-left: 16px;
+}
+
+.large-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background-color: #78909c; /* Blue-grey */
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  font-weight: 400;
+  margin-right: 24px;
+}
+
+.profile-name {
+  font-size: 28px;
+  font-weight: 400;
+  color: #3c4043;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 24px;
+}
+
+.filter-dropdown-wrapper {
+  width: 300px;
+  margin-bottom: 16px;
+}
+
+.task-filter-field {
+  width: 100%;
+}
+
+.task-filter-field ::ng-deep .mat-mdc-text-field-wrapper {
+  padding: 0 12px;
+  background-color: white;
+}
+
+.assignments-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.assignment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.item-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-title {
+  font-size: 14px;
+  color: #3c4043;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.attachment-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  color: #5f6368;
+  margin-left: 8px;
+  margin-right: 2px;
+}
+
+.attachment-count {
+  font-size: 12px;
+  color: #5f6368;
+  font-weight: 400;
+}
+
+.item-due-date {
+  font-size: 12px;
+  color: #5f6368;
+}
+
+.item-right {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-top: 8px; /* align roughly with the middle of the left block */
+}
+
+.item-grade {
+  font-size: 13px;
+  color: #3c4043;
+  font-weight: 500;
+}
+
+.item-grade .missing {
+  color: #d93025; /* Red for missing */
+  font-weight: 500;
+}
+
+.empty-state {
+  padding: 32px 0;
+  text-align: center;
+  color: #5f6368;
+  font-size: 14px;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #5f6368;
+}

@@ -1,0 +1,252 @@
+.grades-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 112px); /* adjust based on header */
+  background: #fff;
+  overflow: hidden;
+}
+
+.grades-grid-wrapper {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+}
+
+.grades-table {
+  border-collapse: collapse;
+  width: max-content;
+  /* Removed min-width: 100% to stop stretching */
+}
+
+.grades-table th, .grades-table td {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.grades-table thead tr:first-child th {
+  border-top: none;
+}
+
+.grades-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* First column should have a right border to separate it from assignments */
+.sticky-col {
+  position: sticky;
+  left: 0;
+  background: #fff;
+  z-index: 2;
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+  border-right: 1px solid #e0e0e0;
+}
+
+.grades-table thead th {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+}
+
+.grades-table thead th.sticky-col {
+  z-index: 3;
+}
+
+.top-left-cell {
+  padding: 16px !important;
+  vertical-align: bottom !important;
+}
+
+.sort-dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #e8eaed; /* Light gray match */
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #3c4043;
+  width: auto;
+  margin-right: 16px;
+}
+
+.sort-dropdown:hover {
+  background-color: #d5d7d9;
+}
+
+.sort-icon {
+  color: #5f6368;
+}
+
+.assignment-header {
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+.assignment-header-content {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  min-height: 100px;
+  justify-content: flex-end;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.due-date {
+  font-size: 12px;
+  color: #5f6368;
+  margin-bottom: 4px;
+}
+
+.title-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.more-btn-container {
+  display: flex;
+  align-items: center;
+}
+
+.blue-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #1a73e8;
+  margin-right: 4px; /* Dot is tiny and next to icon */
+}
+
+.assignment-title {
+  color: #1967d2;
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.assignment-title:hover {
+  text-decoration: underline;
+}
+
+.more-btn {
+  color: #5f6368;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.assignment-header-content:hover .more-btn {
+  opacity: 1;
+}
+
+.badge-new {
+  background-color: #1a73e8;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+.points {
+  font-size: 12px;
+  color: #5f6368;
+}
+
+.class-average-row td {
+  background-color: #f8f9fa;
+  font-weight: 500;
+  height: 48px;
+}
+
+.average-label {
+  display: flex !important;
+  align-items: center;
+  padding: 0 16px !important;
+  color: #3c4043;
+  gap: 16px;
+}
+
+.average-cell {
+  text-align: left;
+  padding-left: 16px !important;
+}
+
+.student-row:hover td {
+  background-color: #f8f9fa;
+}
+
+.student-name-cell {
+  display: flex !important;
+  align-items: center;
+  padding: 8px 16px !important;
+  gap: 16px;
+  height: 48px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.student-name {
+  font-size: 14px;
+  color: #3c4043;
+  font-weight: 500;
+}
+
+.grade-cell {
+  text-align: left;
+  padding: 0 16px !important;
+  height: 48px;
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+.grade-input-wrapper {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.grade-value {
+  font-size: 14px;
+  color: #3c4043;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #5f6368;
+  font-size: 16px;
+}
+
+.empty-subtitle {
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 14px;
+  color: #5f6368;
+}

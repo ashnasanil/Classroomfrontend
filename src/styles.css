@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+
+.full-screen-dialog .mat-mdc-dialog-container {
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.full-screen-dialog .mdc-dialog__surface {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.join-class-dialog-panel .mdc-dialog__surface {
+  padding: 0 !important;
+  background-color: transparent !important;
+  border-radius: 8px !important;
+}
+
+.invite-dialog-panel .mdc-dialog__surface {
+  padding: 0 !important;
+  background-color: transparent !important;
+  border-radius: 8px !important;
+}

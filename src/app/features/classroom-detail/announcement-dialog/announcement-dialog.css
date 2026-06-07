@@ -1,0 +1,167 @@
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  min-width: 500px;
+  max-width: 800px;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-label {
+  font-size: 14px;
+  color: #5f6368;
+  margin-right: 16px;
+  font-weight: 500;
+}
+
+.header-selectors {
+  display: flex;
+  gap: 12px;
+}
+
+.selector-btn {
+  background-color: #f1f3f4;
+  border-radius: 4px;
+  padding: 0 12px;
+  height: 36px;
+  color: #3c4043;
+}
+
+.selector-text {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.students-btn {
+  background-color: transparent;
+  border: 1px solid #dadce0;
+}
+
+.dialog-content {
+  margin-bottom: 16px;
+}
+
+.textarea-container {
+  border: none;
+  border-bottom: 2px solid #1a73e8;
+  background-color: #f8f9fa;
+  border-radius: 4px 4px 0 0;
+  padding: 12px 16px 8px;
+}
+
+.announce-textarea {
+  width: 100%;
+  border: none;
+  background: transparent;
+  resize: none;
+  font-size: 14px;
+  outline: none;
+  font-family: 'Roboto', sans-serif;
+  color: #3c4043;
+}
+
+.announce-textarea::placeholder {
+  color: #1a73e8;
+}
+
+.formatting-toolbar {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.formatting-toolbar button {
+  color: #5f6368;
+  width: 36px;
+  height: 36px;
+}
+
+.formatting-toolbar button mat-icon {
+  font-size: 20px;
+}
+
+/* Attachments Preview */
+.attachments-preview {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.attachment-chip {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.att-icon {
+  margin-right: 12px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.att-icon.drive { color: #f4b400; }
+.att-icon.youtube { color: #ff0000; }
+.att-icon.upload { color: #1a73e8; }
+.att-icon.link { color: #5f6368; }
+
+.att-title {
+  flex: 1;
+  font-size: 14px;
+  color: #3c4043;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.att-remove {
+  color: #5f6368;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.attachment-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.attach-btn {
+  border: 1px solid #dadce0;
+  color: #5f6368;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.post-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.cancel-btn {
+  color: #1a73e8;
+  font-weight: 500;
+}
+
+.post-btn {
+  font-weight: 500;
+  border-radius: 4px;
+}

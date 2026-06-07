@@ -1,0 +1,20 @@
+<h2 mat-dialog-title class="return-dialog-title">Return work to 1 student?</h2>
+<mat-dialog-content>
+  <p class="return-subtitle">Student will be notified and can check any grade you've left</p>
+  
+  <div class="return-student-info">
+    <div class="return-avatar-col">
+      <div class="return-avatar">{{ (data.studentName || 'S').charAt(0).toUpperCase() }}</div>
+    </div>
+    <div class="return-name-col">
+      <div class="return-name">{{ data.studentName }}</div>
+    </div>
+    <div class="return-grade-col" *ngIf="data.grade !== null && data.grade !== undefined">
+      <span class="return-grade">{{ data.grade }}/100</span>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="return-dialog-actions">
+  <button mat-button (click)="onCancel()" class="return-cancel-btn">Cancel</button>
+  <button mat-button (click)="onReturn()" class="return-confirm-btn">Return</button>
+</mat-dialog-actions>
