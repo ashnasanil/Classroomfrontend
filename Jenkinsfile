@@ -40,11 +40,12 @@ steps {
  
 bat 'docker rm -f %CONT% || true'
  
-bat 'docker run -d --name %CONT% -p 4200:80 %IMAGE%'
+bat 'docker run -d --name %CONT% -p 4201:80 %IMAGE%'
  
 }
  
 }
  
 }
-}
+ }
+ 
