@@ -8,6 +8,8 @@ pipeline {
 
         RG      = 'fullstack-rg'
 
+        LOCATION = 'centralindia'
+
         AKS     = 'fullstack-aks'
 
         IMAGE   = 'google-classroom-frontend'
