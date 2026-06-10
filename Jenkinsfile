@@ -1,51 +1,36 @@
- pipeline {
+pipeline {
  
-agent any
+    agent any
  
-environment {
+    environment {
+        IMAGE = "google-classroom-frontend-jenkins:${BUILD_NUMBER}"
+        CONT = "google-classroom-frontend-jenkins"
+    }
  
-IMAGE = "classroom-frontend:${BUILD_NUMBER}"
+    stages {
  
-CONT = "classroom-frontend"
+        stage('Checkout') {
+            steps { checkout scm }
+        }
  
-}
+        stage('Debug') {
+            steps {
+                bat 'echo IMAGE=%IMAGE%'
+            }
+        }
  
-stages {
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t %IMAGE% .'
+            }
+        }
  
-stage('Checkout') {
+        stage('Run Container') {
+            steps {
+                bat 'docker rm -f %CONT% || true'
+                bat 'docker run -d --name %CONT% -p 4206:80 %IMAGE%'
+            }
+        }
  
-steps { checkout scm }
- 
-}
- 
-stage('Debug') {
-    steps {
-        bat 'echo IMAGE=%IMAGE%'
     }
 }
- 
-stage('Build Docker Image') {
- 
-steps {
- 
-bat 'docker build -t %IMAGE% .'
- 
-}
- 
-}
- 
-stage('Run Container') {
- 
-steps {
- 
-bat 'docker rm -f %CONT% || true'
- 
-bat 'docker run -d --name %CONT% -p 4201:80 %IMAGE%'
- 
-}
- 
-}
- 
-}
- }
- 

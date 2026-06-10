@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: google-classroom-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: google-classroom-frontend
+  template:
+    metadata:
+      labels:
+        app: google-classroom-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: fullstackacr.azurecr.io/google-classroom-frontend:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: google-classroom-frontend
+spec:
+  type: LoadBalancer
+  selector:
+    app: google-classroom-frontend
+  ports:
+    - port: 80
+      targetPort: 80
