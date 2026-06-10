@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: fullstackacr.azurecr.io/google-classroom-frontend:latest
+          image: <ACR_NAME>.azurecr.io/google-classroom-frontend:latest
           ports:
             - containerPort: 80
 ---
